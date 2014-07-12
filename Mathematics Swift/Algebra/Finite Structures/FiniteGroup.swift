@@ -110,6 +110,33 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Returns the conjugacy class of an element.
+    *
+    *  @param elem The element whose conjugacy class is to be returned.
+    *
+    *  @return The conjugacy class of an element as a **FiniteSet**.
+    */
+    func conjugacyClass(elem: T) -> FiniteSet<T> {
+        assert(contains(mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        
+        var newSet = FiniteSet<T>()
+        
+        for index in 0 ..< mySet.cardinality() {
+            var tup1 = Tuple(size: 2)
+            var tup2 = Tuple(size: 2)
+            
+            tup1.elements[0] = mySet[index]
+            tup1.elements[1] = elem
+            tup2.elements[0] = applyOperation(tup1)
+            tup2.elements[1] = operation.inverseElement(mySet[index])!
+            
+            newSet.addElement(applyOperation(tup2))
+        }
+        
+        return newSet
+    }
+    
+    /**
     *  Returns the commutator of two elements, in a sense given an indication of how badly the operation fails to commute for two elements. [g,h] = g^-1 + h^-1 + g + h.
     *
     *  @param lhs The first element.
@@ -135,6 +162,28 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Determines whether this group is a subgroup of another group.
+    *
+    *  @param superGroup The supergroup (or ambient group) to test if this group is a subgroup of it.
+    *
+    *  @return Returns **true** if the group is a subgroup of a given group, **false** otherwise.
+    */
+    func isSubgroupOf(superGroup: FiniteGroup<T>) -> Bool {
+        if mySet.isSubsetOf(superGroup.mySet) == false { return false }
+        
+        if self.operation.equivalentMaps(superGroup.operation.relation, testDomain: superGroup.operation.domain, testCodomain: superGroup.operation.codomain) == false { return false }
+        
+        // Collect any useful new inherited information since it is a subgroup.
+        for (key, value) in superGroup.subgroupClosedProperties() {
+            if contains(groupProperties.keys, key) == false {
+                groupProperties[key] = value
+            }
+        }
+        
+        return true
+    }
+    
+    /**
     *  Returns the order of the group.
     *
     *  @return The order of the group.
@@ -142,6 +191,111 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     func order() -> Int {
         return self.mySet.cardinality()
     }
+    
+    func order(elem: T) -> Int {
+        assert(contains(mySet.elements, elem), "The parameter 'elem' is not a member of the group.")
+        
+        // if self.order() > 5
+        
+        // Deal with the trivial case
+        if elem == self.identity {
+            return 1
+        }
+        
+        // The order of an element must divide the order of the group, thus we only need to check those powers
+        var possibleOrders: [Int]
+        var curPwr: T
+        
+        // Initialize the current power of the element
+        curPwr = elem
+        
+        // Find all possible values for the order of the element
+        possibleOrders = findFactors(self.order())
+        
+        for index in 1 ..< possibleOrders.count {
+            var curTup = Tuple(size: 2)
+            curTup.elements[0] = curPwr
+            curTup.elements[1] = self.power(elem, exponent: possibleOrders[index] - possibleOrders[index - 1])
+            curPwr = self.applyOperation(curTup)
+            
+            if curPwr == self.identity {
+                return possibleOrders[index]
+            }
+        }
+        
+        fatalError("Error: Could not find order of element?! There must be a problem with the code.")
+    }
+    
+    /**
+    *  Returns the power of a given element.
+    *
+    *  @param elem The element to multiply by itself to the exponent-th degree.
+    *  @param exponent The number of times to multiply the element by itself.
+    *
+    *  @return The power of a given element.
+    */
+    func power(elem: T, exponent: Int) -> T {
+        var x: T
+        var g: T
+        var curTup = Tuple(size: 2)
+        var curExponent = exponent
+        
+        x = self.identity
+        g = elem
+        
+        if curExponent % 2 == 1 {
+            curTup.elements[0] = x
+            curTup.elements[1] = g
+            x = self.applyOperation(curTup)
+        }
+        
+        while curExponent > 1 {
+            curTup.elements[0] = g
+            curTup.elements[1] = g
+            g = self.applyOperation(curTup)
+            
+            curExponent = curExponent / 2
+            
+            if curExponent % 2 == 1 {
+                curTup.elements[0] = x
+                curTup.elements[1] = g
+                x = self.applyOperation(curTup)
+            }
+        }
+        
+        return x
+    }
+    
+    /**
+    *  Returns the set of all conjugacy classes of this group.
+    *
+    *  @return The set of all conjugacy classes of this group.
+    */
+    func setOfAllConjugacyClasses() -> FiniteSet<FiniteSet<T>> {
+        var newSet = FiniteSet<FiniteSet<T>>()
+        
+        for index in 0 ..< mySet.cardinality() {
+            newSet.addElement(self.conjugacyClass(mySet[index]))
+        }
+        
+        return newSet
+    }
+    
+    /**
+    *  Returns the trivial subgroup of this group.
+    *
+    *  @return The trivial subgroup of this group.
+    */
+    func trivialSubgroup() -> FiniteGroup<T> {
+        var newSet = FiniteSet<T>()
+        newSet.addElement(self.identity)
+        
+        var newOp = self.operation.restriction(newSet)
+        
+        return FiniteGroup<T>(mySet: newSet, operation: newOp, knownProperties: subgroupClosedProperties())
+    }
+    
+    // MARK: - Properties Subsets
     
     func subgroupClosedProperties() -> [String: Bool] {
         return propertiesSubset(["abelian", "cyclic", "dedekind", "metabelian", "metanilpotent", "nilpotent", "solvable", "t*-group"], superSet: groupProperties)
@@ -159,10 +313,9 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         return propertiesSubset(["abelian", "ambivalent", "metabelian", "nilpotent", "perfect", "solvable"], superSet: groupProperties)
     }
+    
 }
 
 func == <T: protocol<Equatable, Initable>> (lhs: FiniteGroup<T>, rhs: FiniteGroup<T>) -> Bool {
-    // TODO: Finish
-    
-    return false
+    return lhs.mySet == rhs.mySet && lhs.operation == rhs.operation
 }
