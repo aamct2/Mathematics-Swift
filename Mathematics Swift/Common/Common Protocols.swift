@@ -41,7 +41,7 @@ protocol IDividable : IMultipliable, IMultiplicativeIdentity {
 
 protocol IMultipliable {
     
-    func multipy(rhs: Self) -> Self
+    func multiply(rhs: Self) -> Self
     func *(lhs: Self, rhs: Self) -> Self
     
 }

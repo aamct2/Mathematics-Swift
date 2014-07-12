@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Matrix<T: protocol<IDividable, ISubtractable, Comparable, Initable>> : ISubtractable, Equatable {
+class Matrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Comparable, Initable>> : ISubtractable, Equatable {
     
     var elements = Array(count:9, repeatedValue:T())
     
@@ -20,6 +20,10 @@ class Matrix<T: protocol<IDividable, ISubtractable, Comparable, Initable>> : ISu
     
     var additiveIdentity : Matrix<T> {
         return Matrix<T>(rows: self.rows, columns: self.columns)
+    }
+    
+    convenience init() {
+        self.init(rows: 3, columns: 3)
     }
     
     /**
@@ -38,6 +42,8 @@ class Matrix<T: protocol<IDividable, ISubtractable, Comparable, Initable>> : ISu
         //elements = Array(count:size, repeatedValue:exampleT.additiveIdentity)
     }
     
+    // MARK: - Methods
+    
     func add(rhs: Matrix<T>) -> Matrix<T> {
         assert(self.rows == rhs.rows, "Matrix addition requires the number of rows to be the same")
         assert(self.columns == rhs.columns, "Matrix addition requires the number of columns to be the same")
@@ -54,6 +60,40 @@ class Matrix<T: protocol<IDividable, ISubtractable, Comparable, Initable>> : ISu
         }
         
         return result
+    }
+    
+    /**
+    *  Returns an array of the values in a particular row.
+    *
+    *  @param rowIndex Index of the row.
+    *
+    *  @return Array of the values in a particular row.
+    */
+    func getRow(rowIndex: Int) -> [T] {
+        var row = Array(count:columns, repeatedValue:T())
+        
+        for colIndex in 0 ..< columns {
+            row[colIndex] = self[rowIndex, colIndex]
+        }
+        
+        return row
+    }
+    
+    /**
+    *  Returns an array of the values in a particular column.
+    *
+    *  @param colIndex Index of the column.
+    *
+    *  @return Array of the values in a particular column.
+    */
+    func getCol(colIndex: Int) -> [T] {
+        var col = Array(count:rows, repeatedValue:T())
+        
+        for rowIndex in 0 ..< rows {
+            col[rowIndex] = self[rowIndex, colIndex]
+        }
+        
+        return col
     }
     
     func hadamardProduct(rhs: Matrix<T>) -> Matrix<T> {

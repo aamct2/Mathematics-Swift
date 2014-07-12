@@ -47,7 +47,7 @@ class RealNumber : Comparable, Initable, IAbsoluteable, IDividable, ISubtractabl
         return RealNumber(value: log(rhs.value))
     }
     
-    func multipy(rhs: RealNumber) -> RealNumber {
+    func multiply(rhs: RealNumber) -> RealNumber {
         return RealNumber(value: self.value * rhs.value)
     }
     
@@ -77,7 +77,7 @@ func - (lhs: RealNumber, rhs: RealNumber) -> RealNumber {
 }
 
 func * (lhs: RealNumber, rhs: RealNumber) -> RealNumber {
-    return lhs.multipy(rhs)
+    return lhs.multiply(rhs)
 }
 
 func / (lhs: RealNumber, rhs: RealNumber) -> RealNumber {

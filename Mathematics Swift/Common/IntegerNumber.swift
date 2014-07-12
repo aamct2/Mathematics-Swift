@@ -40,7 +40,7 @@ class IntegerNumber : NSObject, ISubtractable, IMultipliable, IMultiplicativeIde
         return IntegerNumber(value: self.value + rhs.value)
     }
     
-    func multipy(rhs: IntegerNumber) -> IntegerNumber {
+    func multiply(rhs: IntegerNumber) -> IntegerNumber {
         return IntegerNumber(value: self.value * rhs.value)
     }
     
@@ -61,7 +61,7 @@ func -(lhs:IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
 }
 
 func *(lhs: IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
-    return lhs.multipy(rhs)
+    return lhs.multiply(rhs)
 }
 
 func <=(lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
