@@ -162,6 +162,21 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Determines whether a given element generates the group.
+    *
+    *  @param elem The element to test as a generator of the group.
+    *
+    *  @return Returns **true** if a given element generates the whole group, **false** otherwise.
+    */
+    func generatesGroup(elem: T) -> Bool {
+        assert(contains(mySet.elements, elem), "The parameter 'elem' is not a member of this group.")
+        
+        if self.order(elem) == self.order() { return true }
+        
+        return false
+    }
+    
+    /**
     *  Determines whether this group is abelian. In other words, if its operation is commutative.
     *
     *  @return Returns **true** if the group is abelian, **false** otherwise.
@@ -224,6 +239,26 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         }
         
         return false
+    }
+    
+    /**
+    *  Determines whether or not this group is cyclic.
+    *
+    *  @return Returns **true** if the group is cyclic, **false** otherwise.
+    */
+    func isCyclic() -> Bool {
+        if !(contains(groupProperties.keys, "cyclic")) {
+            for index in 0 ..< self.order() {
+                if self.generatesGroup(mySet[index]) {
+                    groupProperties["cyclic"] = true
+                    return true
+                }
+            }
+            
+            groupProperties["cyclic"] = false
+        }
+        
+        return groupProperties["cyclic"]!
     }
     
     /**
