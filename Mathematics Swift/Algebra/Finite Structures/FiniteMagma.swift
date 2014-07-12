@@ -39,6 +39,23 @@ class FiniteMagma<T: protocol<Equatable, Initable>> {
         return operation.applyMap(input)
     }
     
+    /**
+    *  Determines whether a given finite set and operation will form a finite magma.
+    *
+    *  @param testSet The finite set to test.
+    *  @param testOperation The operation to test.
+    *
+    *  @return Returns **true** if the given set and operation will form a magma, **false** otherwise.
+    */
+    class func isMagma(testSet: FiniteSet<T>, testOperation: FiniteBinaryOperation<T>) -> Bool {
+        return testOperation.codomain == testSet
+    }
+    
+    /**
+    *  Returns the set of all elements of the structure 'a' such that there exists a 'b' where 'a' = 'b' * 'b'.
+    *
+    *  @return The finite set of all square elements.
+    */
     func setOfSquareElements() -> FiniteSet<T> {
         if contains(magmaProperties.keys, "all square elements") == false {
             var result = FiniteSet<T>()

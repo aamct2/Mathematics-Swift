@@ -50,9 +50,7 @@ class Semigroup<T: protocol<Equatable, Initable>> : FiniteMagma<T> {
     *  @return Returns **true** if the given set and operation will form a semigroup, **false** otherwise.
     */
     class func isSemigroup(testSet: FiniteSet<T>, testOperation: FiniteBinaryOperation<T>) -> Bool {
-        // TODO: Finish
-        
-        return false
+        return FiniteMagma.isMagma(testSet, testOperation: testOperation) && testOperation.isCommutative()
     }
     
     /**
@@ -63,9 +61,7 @@ class Semigroup<T: protocol<Equatable, Initable>> : FiniteMagma<T> {
     *  @return Returns **true** if the given magma is also a semigroup, **false** otherwise.
     */
     class func isSemigroup(testMagma: FiniteMagma<T>) -> Bool {
-        // TODO: Finish
-        
-        return false
+        return testMagma.operation.isCommutative()
     }
     
     /**
