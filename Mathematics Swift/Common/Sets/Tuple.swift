@@ -35,7 +35,7 @@ class Tuple : Equatable, Initable {
         // Make sure the tuples are of the same size
         if self.size != otherTuple.size { return false }
         
-        for index in 0..<self.size {
+        for index in 0 ..< self.size {
             // Make sure the elements are of the same type
             // TODO: Finish
             

@@ -35,9 +35,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
     // MARK: - Methods
     
     func applyMap(input: T) -> G {
-        if contains(domain.elements, input) == false {
-            fatalError("Domain does not contain input element!")
-        }
+        assert(contains(domain.elements, input), "Domain does not contain input element!")
         
         // No need to check if the output is in the codomain.
         // The relation is checked to be well-defined when the relation is set.
@@ -53,9 +51,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
     *  @return Composition of function in which this function is the outer function of the composition.
     */
     func composition<S: protocol<Equatable, Initable>>(innerFunction: FiniteFunction<S, T>) -> FiniteFunction<S, G> {
-        if !(innerFunction.codomain == self.domain) {
-            fatalError("The codomain of innerFunction must be equal to the domain of this function.")
-        }
+        assert(innerFunction.codomain == self.domain, "The codomain of innerFunction must be equal to the domain of this function.")
         
         var newMap = CompositionMap<S, T, G>(innerMap: innerFunction.relation, outerMap: self.relation)
         var newFunc = FiniteFunction<S, G>(domain: innerFunction.domain, codomain: self.codomain, relation: newMap)
@@ -95,9 +91,26 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
         return true
     }
     
+    /**
+    *  Determines if maps are equivalent for a given domain and codomain.
+    *
+    *  @param otherMap The other relation to test.
+    *  @param testDomain The domain to test.
+    *  @param testCodomain The codomain to test.
+    *
+    *  @return Whether the two maps are equivalent.
+    */
     func equivalentMaps(otherMap: MathMap<T, G>, testDomain: FiniteSet<T>, testCodomain: FiniteSet<G>) -> Bool {
         
-        // TODO: Finish
+        // Check to see if they both form functions
+        if FiniteFunction.isFunction(testDomain, testCodomain: testCodomain, testRelation: self.relation) && FiniteFunction.isFunction(testDomain, testCodomain: testCodomain, testRelation: otherMap) {
+            
+            var testFunc1 = FiniteFunction<T, G>(domain: testDomain, codomain: testCodomain, relation: self.relation)
+            var testFunc2 = FiniteFunction<T, G>(domain: testDomain, codomain: testCodomain, relation: otherMap)
+            
+            // Test equality
+            return testFunc1 == testFunc2
+        }
         
         return false
     }
@@ -175,6 +188,17 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
             
             return inverseFunc
         }
+    }
+    
+    class func isFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, Initable>>(testDomain: FiniteSet<T>, testCodomain: FiniteSet<G>, testRelation: MathMap<T, G>) -> Bool {
+        
+        for index in 0 ..< testDomain.cardinality() {
+            if contains(testCodomain.elements, testRelation.applyMap(testDomain[index])) == false {
+                return false
+            }
+        }
+        
+        return true
     }
     
     func isInjective() -> Bool {

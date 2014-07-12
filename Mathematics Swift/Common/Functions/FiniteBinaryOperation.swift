@@ -293,7 +293,10 @@ class FiniteBinaryOperation<T: protocol<Equatable, Initable>> : FiniteFunction<T
     }
     
     func restriction(newCodomain: FiniteSet<T>) -> FiniteBinaryOperation<T>? {
-        assert(newCodomain.isSubsetOf(self.codomain), "The newCodomain is not a subset of this operation's Codomain.")
+        if !(newCodomain.isSubsetOf(self.codomain)) {
+            // The newCodomain is not a subset of this operation's Codomain.
+            return nil
+        }
         
         var newOp = FiniteBinaryOperation<T>(codomain: newCodomain, relation: self.relation)
         
