@@ -8,11 +8,11 @@
 
 import Foundation
 
-class IntegerNumber : NSObject, ISubtractable, IMultipliable, IMultiplicativeIdentity, Comparable, Equatable, IAbsoluteable, Printable {
+class IntegerNumber : Initable, ISubtractable, IMultipliable, IMultiplicativeIdentity, Comparable, Equatable, IAbsoluteable, Printable {
     
     var value : Int = 0
     
-    override var description : String {
+    var description : String {
         return "\(value)"
     }
     
@@ -25,6 +25,10 @@ class IntegerNumber : NSObject, ISubtractable, IMultipliable, IMultiplicativeIde
     }
     
     // MARK: - Initializers
+    
+    convenience init() {
+        self.init(value: 0)
+    }
     
     init(value: Int) {
         self.value = value

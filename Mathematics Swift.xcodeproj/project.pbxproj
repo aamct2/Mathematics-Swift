@@ -12,6 +12,8 @@
 		9380EFBA196F47BC005E52AC /* FiniteMagma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9380EFB9196F47BC005E52AC /* FiniteMagma.swift */; };
 		93B152B519709D0D0003AE73 /* FiniteSemigroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */; };
 		93B1E94F196BAC490090FEB5 /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B1E94E196BAC490090FEB5 /* Tuple.swift */; };
+		93B26C0619717D3C00E79379 /* FiniteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B26C0519717D3C00E79379 /* FiniteGroup.swift */; };
+		93B26C081971892800E79379 /* Common Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B26C071971892800E79379 /* Common Functions.swift */; };
 		93B66FBC196CD31D00E0F0B9 /* FiniteBinaryOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B66FBB196CD31D00E0F0B9 /* FiniteBinaryOperation.swift */; };
 		93C29692195239C500CEF01B /* Mathematics Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 93C29691195239C500CEF01B /* Mathematics Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93C29698195239C500CEF01B /* Mathematics Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C2968C195239C500CEF01B /* Mathematics Swift.framework */; };
@@ -42,6 +44,8 @@
 		9380EFB9196F47BC005E52AC /* FiniteMagma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteMagma.swift; sourceTree = "<group>"; };
 		93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteSemigroup.swift; sourceTree = "<group>"; };
 		93B1E94E196BAC490090FEB5 /* Tuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
+		93B26C0519717D3C00E79379 /* FiniteGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteGroup.swift; sourceTree = "<group>"; };
+		93B26C071971892800E79379 /* Common Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Common Functions.swift"; sourceTree = "<group>"; };
 		93B66FBB196CD31D00E0F0B9 /* FiniteBinaryOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteBinaryOperation.swift; sourceTree = "<group>"; };
 		93C2968C195239C500CEF01B /* Mathematics Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Mathematics Swift.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93C29690195239C500CEF01B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,6 +86,7 @@
 		9380EFB8196F4797005E52AC /* Finite Structures */ = {
 			isa = PBXGroup;
 			children = (
+				93B26C0519717D3C00E79379 /* FiniteGroup.swift */,
 				9380EFB9196F47BC005E52AC /* FiniteMagma.swift */,
 				933014CD1970BBA4004633B3 /* FiniteMonoid.swift */,
 				93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */,
@@ -164,6 +169,7 @@
 				93C296B2195250D700CEF01B /* Playground.playground */,
 				93C296B01952405000CEF01B /* IntegerNumber.swift */,
 				93DD98B019713FB1006F8B08 /* RealNumber.swift */,
+				93B26C071971892800E79379 /* Common Functions.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -313,6 +319,7 @@
 				93C296AF19523D9100CEF01B /* Common Protocols.swift in Sources */,
 				93D6268E196CB1D600D8258E /* MathMap.swift in Sources */,
 				933014CE1970BBA4004633B3 /* FiniteMonoid.swift in Sources */,
+				93B26C081971892800E79379 /* Common Functions.swift in Sources */,
 				9380EFBA196F47BC005E52AC /* FiniteMagma.swift in Sources */,
 				93DD98B119713FB1006F8B08 /* RealNumber.swift in Sources */,
 				93336F1E196E0958009C0E1D /* Matrix.swift in Sources */,
@@ -322,6 +329,7 @@
 				93DD98B31971435E006F8B08 /* SquareMatrix.swift in Sources */,
 				93C296B61952530C00CEF01B /* OrderedPair.swift in Sources */,
 				93B1E94F196BAC490090FEB5 /* Tuple.swift in Sources */,
+				93B26C0619717D3C00E79379 /* FiniteGroup.swift in Sources */,
 				93B152B519709D0D0003AE73 /* FiniteSemigroup.swift in Sources */,
 				93D62690196CB52A00D8258E /* FiniteFunction.swift in Sources */,
 			);

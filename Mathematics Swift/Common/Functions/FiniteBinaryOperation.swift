@@ -142,6 +142,34 @@ class FiniteBinaryOperation<T: protocol<Equatable, Initable>> : FiniteFunction<T
         return result
     }
     
+    /**
+    *  Returns the inverse of the element. In other words, given a this function returns b such that a + b = b + a = e.
+    *
+    *  @param elem Element for which to find the inverse.
+    *
+    *  @return The inverse of **elem**.
+    */
+    func inverseElement(elem: T) -> T? {
+        assert(self.hasIdentity(), "This operation does not have an identity element.")
+        
+        for index in 0 ..< codomain.cardinality() {
+            var tup1 = Tuple(size: 2)
+            var tup2 = Tuple(size: 2)
+            
+            tup1.elements[0] = elem
+            tup1.elements[1] = codomain[index]
+            tup2.elements[0] = codomain[index]
+            tup2.elements[1] = elem
+            
+            if self.applyMap(tup1) == self.identity && self.applyMap(tup2) == self.identity {
+                return codomain[index]
+            }
+        }
+        
+        // This element does not have an inverse.
+        return nil
+    }
+    
     func isAssociative() -> Bool {
         if contains(functionProperties.keys, "associativity") {
             return functionProperties["associativity"]!
@@ -151,9 +179,21 @@ class FiniteBinaryOperation<T: protocol<Equatable, Initable>> : FiniteFunction<T
         
         // TODO: Finish
         
+        var originalTable = self.cayleyTableGeneric()
+        var cayleyMatrix = SquareMatrix<RealNumber>(rows: domainSize + 1)
+        
         // Turn the Cayley table into a SquareMatrix for easier processing
-        for colIndex in 0..<domainSize {
-            
+        for colIndex in 0 ..< domainSize {
+            cayleyMatrix[0, colIndex] = RealNumber(value: Double(colIndex))
+        }
+        for rowIndex in 0 ..< domainSize {
+            for colIndex in 0 ... domainSize {
+                cayleyMatrix[rowIndex + 1, colIndex] = RealNumber(value: Double(originalTable[rowIndex][colIndex]))
+            }
+        }
+        
+        for keyElementIndex in 0 ..< domainSize {
+            // Build header for lightTable
         }
         
         return false
@@ -244,6 +284,22 @@ class FiniteBinaryOperation<T: protocol<Equatable, Initable>> : FiniteFunction<T
         functionProperties["identity"] = false
         
         return false
+    }
+    
+    func hasInverses() -> Bool {
+        // TODO: Finish
+        
+        return false
+    }
+    
+    func restriction(newCodomain: FiniteSet<T>) -> FiniteBinaryOperation<T> {
+        assert(newCodomain.isSubsetOf(self.codomain), "The newCodomain is not a subset of this operation's Codomain.")
+        
+        var newOp = FiniteBinaryOperation<T>(codomain: newCodomain, relation: self.relation)
+        
+        // TODO: Finish
+        
+        return newOp
     }
     
 }
