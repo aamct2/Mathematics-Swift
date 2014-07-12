@@ -21,6 +21,7 @@
 		93C296B61952530C00CEF01B /* OrderedPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C296B51952530C00CEF01B /* OrderedPair.swift */; };
 		93D6268E196CB1D600D8258E /* MathMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D6268D196CB1D600D8258E /* MathMap.swift */; };
 		93D62690196CB52A00D8258E /* FiniteFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D6268F196CB52A00D8258E /* FiniteFunction.swift */; };
+		93DD98B119713FB1006F8B08 /* RealNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93DD98B019713FB1006F8B08 /* RealNumber.swift */; };
 		93F9EBC3196B5D2B00F54629 /* FiniteSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93F9EBC2196B5D2B00F54629 /* FiniteSet.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		93C296B51952530C00CEF01B /* OrderedPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderedPair.swift; sourceTree = "<group>"; };
 		93D6268D196CB1D600D8258E /* MathMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathMap.swift; sourceTree = "<group>"; };
 		93D6268F196CB52A00D8258E /* FiniteFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteFunction.swift; sourceTree = "<group>"; };
+		93DD98B019713FB1006F8B08 /* RealNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNumber.swift; sourceTree = "<group>"; };
 		93F9EBC2196B5D2B00F54629 /* FiniteSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -158,6 +160,7 @@
 				93C296AE19523D9100CEF01B /* Common Protocols.swift */,
 				93C296B2195250D700CEF01B /* Playground.playground */,
 				93C296B01952405000CEF01B /* IntegerNumber.swift */,
+				93DD98B019713FB1006F8B08 /* RealNumber.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 				93D6268E196CB1D600D8258E /* MathMap.swift in Sources */,
 				933014CE1970BBA4004633B3 /* FiniteMonoid.swift in Sources */,
 				9380EFBA196F47BC005E52AC /* FiniteMagma.swift in Sources */,
+				93DD98B119713FB1006F8B08 /* RealNumber.swift in Sources */,
 				93336F1E196E0958009C0E1D /* Matrix.swift in Sources */,
 				93F9EBC3196B5D2B00F54629 /* FiniteSet.swift in Sources */,
 				93B66FBC196CD31D00E0F0B9 /* FiniteBinaryOperation.swift in Sources */,
