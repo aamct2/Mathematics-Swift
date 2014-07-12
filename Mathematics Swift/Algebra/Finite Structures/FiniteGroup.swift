@@ -104,7 +104,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         knownProperties["abelian"] = true
         
-        var newOp = self.operation.restriction(newSet)
+        var newOp = self.operation.restriction(newSet)!
         
         return FiniteGroup<T>(mySet: newSet, operation: newOp, knownProperties: knownProperties)
     }
@@ -162,6 +162,171 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Determines whether this group is abelian. In other words, if its operation is commutative.
+    *
+    *  @return Returns **true** if the group is abelian, **false** otherwise.
+    */
+    func isAbelian() -> Bool {
+        if !(contains(groupProperties.keys, "abelian")) {
+            groupProperties["abelian"] = self.operation.isCommutative()
+        }
+        
+        return groupProperties["abelian"]!
+    }
+    
+    /**
+    *  Determines whether this group is ambivalent. In other words, if every element and its inverse are conjugates.
+    *
+    *  @return Returns **true** if the group is ambivalent, **false** otherwise.
+    */
+    func isAmbivalent() -> Bool {
+        if !(contains(groupProperties.keys, "ambivalent")) {
+            for index in 0 ..< self.order() {
+                var curElem = mySet[index]
+                var curInverse = operation.inverseElement(curElem)!
+                
+                if self.isConjugate(curElem, rhs: curInverse) == false {
+                    groupProperties["ambivalen"] = false
+                    return false
+                }
+            }
+            
+            groupProperties["ambivalen"] = true
+        }
+        
+        return groupProperties["ambivalent"]!
+    }
+    
+    /**
+    *  Determines whether two elements of the group are conjugate to eachother. Two elements A and B are conjugate if there exists a G such that G + A + G^-1 = B.
+    *
+    *  @param lhs The first element.
+    *  @param rhs The second element.
+    *
+    *  @return Returns **true** if the two elements are conjugates, **false** otherwise.
+    */
+    func isConjugate(lhs: T, rhs: T) -> Bool {
+        assert(contains(mySet.elements, lhs), "The parameter 'lhs' is not a member of this group.")
+        assert(contains(mySet.elements, rhs), "The parameter 'rhs' is not a member of this group.")
+        
+        for index in 0 ..< self.order() {
+            var tup1 = Tuple(size: 2)
+            var tup2 = Tuple(size: 2)
+            
+            tup1.elements[0] = mySet[index]
+            tup1.elements[1] = lhs
+            tup2.elements[0] = applyOperation(tup1)
+            tup2.elements[1] = operation.inverseElement(mySet[index])!
+            
+            if applyOperation(tup2) == rhs {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    /**
+    *  Determines whether or not this group is a Dedekind group. In other words, that all its subgroups are normal.
+    *
+    *  @return Returns **true** if the group is a Dedekind group, **false** otherwise.
+    */
+    func isDedekind() -> Bool {
+        if !(contains(groupProperties.keys, "dedekind")) {
+            // Abelian implies Dedekind, check to see if we've calculated that already.
+            if contains(groupProperties.keys, "abelian") {
+                if groupProperties["abelian"] {
+                    groupProperties["dedekind"] = true
+                    return true
+                }
+            }
+            
+            // Nilpotent + T-Group implies Dedekind, check to see if we've calculated that already.
+            if contains(groupProperties.keys, "nilpotent") && contains(groupProperties.keys, "t-group") {
+                if groupProperties["nilpotent"] && groupProperties["t-group"] {
+                    groupProperties["dedekind"] = true
+                    return true
+                }
+            }
+            
+            if setOfAllSubgroups() == setOfAllNormalSubgroups() {
+                groupProperties["dedekind"] = true
+            } else {
+                groupProperties["dedekind"] = false
+            }
+        }
+        
+        return groupProperties["dedekind"]!
+    }
+    
+    /**
+    *  Determines whether or not this group is a Hamiltonian group. In other words, a non-abelian Dedekind group.
+    *
+    *  @return Returns **true** if the group is a Hamiltonian group, **false** otherwise.
+    */
+    func isHamiltonian() -> Bool {
+        if !(contains(groupProperties.keys, "hamiltonian")) {
+            if self.isDedekind() == true && self.isAbelian() == false {
+                groupProperties["hamiltonian"] = true
+            } else {
+                groupProperties["hamiltonian"] = false
+            }
+        }
+        
+        return groupProperties["hamiltonian"]!
+    }
+    
+    /**
+    *  Determines whether a given finite set and operation will form a finite group.
+    *
+    *  @param testSet The finite set to test.
+    *  @param testOperation The operation to test.
+    *
+    *  @return Returns **true** if a given set and operation will form a group, **false** otherwise.
+    */
+    class func isGroup(testSet: FiniteSet<T>, testOperation: FiniteBinaryOperation<T>) -> Bool {
+        return FiniteMonoid<T>.isMonoid(testSet, testOperation: testOperation) && testOperation.hasInverses()
+    }
+    
+    /**
+    *  Determines whether a given finite monoid will form a finite group.
+    *
+    *  @param testMonoid The monoid to test.
+    *
+    *  @return Returns **true** if a given monoid is also a group, **false** otherwise.
+    */
+    class func isGroup(testMonoid: FiniteMonoid<T>) -> Bool {
+        return testMonoid.operation.hasInverses()
+    }
+    
+    /**
+    *  Determines whether this group is a normal subgroup of another group. A subgroup is normal if and only if all left and right cosets coincide.
+    *
+    *  @param superGroup The supergroup (or ambient group) to test if this group is a normal subgroup of it.
+    *
+    *  @return Returns **true** if the group is a normal subgroup of a given group, **false** otherwise.
+    */
+    func isNormalSubgroup(superGroup: FiniteGroup<T>) -> Bool {
+        // First check to make sure it is a subgroup
+        if self.isSubgroupOf(superGroup) == false { return false }
+        
+        // Check to see if it is the whole group, which is trivially normal
+        if self.order() == superGroup.order() { return true }
+        
+        // Check to see if it is of index 2, which would quickly imply that it is normal
+        if self.subgroupIndex(superGroup) == 2.0 { return true }
+        
+        // Alright, crank it the long way
+        for index in 0 ..< superGroup.mySet.cardinality() {
+            if !(superGroup.leftCoset(self, elem: superGroup.mySet[index]) == superGroup.rightCoset(self, elem: superGroup.mySet[index])) {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    /**
     *  Determines whether this group is a subgroup of another group.
     *
     *  @param superGroup The supergroup (or ambient group) to test if this group is a subgroup of it.
@@ -184,6 +349,32 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Returns the left coset of a particular element with a particular subgroup.
+    *
+    *  @param subgroup The subgroup with which to form the left coset.
+    *  @param elem The element whose left coset is to be returned.
+    *
+    *  @return The left coset of a given element and given subgroup.
+    */
+    func leftCoset(subgroup: FiniteGroup<T>, elem: T) -> FiniteSet<T> {
+        assert(subgroup.isSubgroupOf(self), "The parameter 'subgroup' is not a subgroup of this group.")
+        assert(contains(self.mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        
+        var newSet = FiniteSet<T>()
+        
+        for index in 0 ..< self.mySet.cardinality() {
+            var curTup = Tuple(size: 2)
+            
+            curTup.elements[0] = elem
+            curTup.elements[1] = subgroup.mySet[index]
+            
+            newSet.addElement(self.applyOperation(curTup))
+        }
+        
+        return newSet
+    }
+    
+    /**
     *  Returns the order of the group.
     *
     *  @return The order of the group.
@@ -192,6 +383,13 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         return self.mySet.cardinality()
     }
     
+    /**
+    *  Returns the order of a particular element of the group.
+    *
+    *  @param elem The element whose order is to be returned.
+    *
+    *  @return The order of a given element.
+    */
     func order(elem: T) -> Int {
         assert(contains(mySet.elements, elem), "The parameter 'elem' is not a member of the group.")
         
@@ -267,6 +465,32 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Returns the right coset of a particular element with a particular subgroup.
+    *
+    *  @param subgroup The subgroup with which to form the right coset.
+    *  @param elem The element whose right coset is to be returned.
+    *
+    *  @return The right coset of a given element and a given subgroup.
+    */
+    func rightCoset(subgroup: FiniteGroup<T>, elem: T) -> FiniteSet<T> {
+        assert(subgroup.isSubgroupOf(self), "The parameter 'subgroup' is not a subgroup of this group.")
+        assert(contains(self.mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        
+        var newSet = FiniteSet<T>()
+        
+        for index in 0 ..< self.mySet.cardinality() {
+            var curTup = Tuple(size: 2)
+            
+            curTup.elements[0] = subgroup.mySet[index]
+            curTup.elements[1] = elem
+            
+            newSet.addElement(self.applyOperation(curTup))
+        }
+        
+        return newSet
+    }
+    
+    /**
     *  Returns the set of all conjugacy classes of this group.
     *
     *  @return The set of all conjugacy classes of this group.
@@ -282,6 +506,95 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Returns the set of all normal subgroups of this group (includes improper subgroups).
+    *
+    *  @return The set of all normal subgroups.
+    */
+    func setOfAllNormalSubgroups() -> FiniteSet<FiniteGroup<T>> {
+        if !(contains(groupProperties.keys, "all normal subgroups")) {
+            // Check to see if it is an abelian group, makes this trivial
+            if contains(groupProperties.keys, "abelian") {
+                if groupProperties["abelian"] == true {
+                    allNormalSubgroups = setOfAllSubgroups()
+                    groupProperties["all normal subgroups"] = true
+                    return allNormalSubgroups!.clone()
+                }
+            }
+            
+            var subgroups = setOfAllSubgroups()
+            var newSet = FiniteSet<FiniteGroup<T>>()
+            
+            for subgroup in subgroups {
+                if subgroup.isNormalSubgroup(self) {
+                    newSet.addElement(subgroup)
+                }
+            }
+            
+            allNormalSubgroups = newSet
+            groupProperties["all normal subgroups"] = true
+        }
+        
+        return allNormalSubgroups!.clone()
+    }
+    
+    func setOfAllSubgroups() -> FiniteSet<FiniteGroup<T>> {
+        if !(contains(groupProperties.keys, "all subgroups")) {
+            var newSet = FiniteSet<FiniteGroup<T>>()
+            
+            var modifiedSet = mySet.clone()
+            modifiedSet.deleteElement(modifiedSet.indexOf(self.identity))
+            
+            // Generating the powerset is an expensive operation.
+            // All subgroups must contain the identity element. So remove it, then create the powerset, then add it back in to each of these candidates.
+            var pwrSet = modifiedSet.powerSet()
+            for index in 0 ..< pwrSet.cardinality() {
+                var curSet = pwrSet[index]
+                curSet.addElementWithoutCheck(self.identity)
+                
+                pwrSet[index] = curSet
+            }
+            
+            // Order of the subgroup must divide the order of the group (finite only)
+            // So only bother trying those
+            for var index = pwrSet.cardinality() - 1; index >= 0; --index {
+                if self.order() % pwrSet[index].cardinality() != 0 {
+                    pwrSet.deleteElement(index)
+                }
+            }
+            
+            var knownProps = self.subgroupClosedProperties()
+            
+            for index in 0 ..< pwrSet.cardinality() {
+                if let newOp = operation.restriction(pwrSet[index]) {
+                    if FiniteGroup<T>.isGroup(pwrSet[index], testOperation: newOp) {
+                        newSet.addElement(FiniteGroup<T>(mySet: pwrSet[index], operation: newOp, knownProperties: knownProps))
+                    } else {
+                        // If there was an exception, the operation does not exist, so that element of the power set is not a group
+                    }
+                }
+            } // End For index
+            
+            allSubgroups = newSet
+            groupProperties["all subgroups"] = true
+        }
+        
+        return allSubgroups!.clone()
+    }
+    
+    /**
+    *  Returns the index of this group as a subgroup of a given supergroup.
+    *
+    *  @param superGroup The superGroup of this group for which the index is to be returned.
+    *
+    *  @return The index of this group as a subgroup of a given supergroup.
+    */
+    func subgroupIndex(superGroup: FiniteGroup<T>) -> Double {
+        assert(self.isSubgroupOf(superGroup), "This group is not a subgroup of the parameter 'superGroup'.")
+        
+        return Double(self.order()) / Double(superGroup.order())
+    }
+    
+    /**
     *  Returns the trivial subgroup of this group.
     *
     *  @return The trivial subgroup of this group.
@@ -290,7 +603,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         var newSet = FiniteSet<T>()
         newSet.addElement(self.identity)
         
-        var newOp = self.operation.restriction(newSet)
+        var newOp = self.operation.restriction(newSet)!
         
         return FiniteGroup<T>(mySet: newSet, operation: newOp, knownProperties: subgroupClosedProperties())
     }

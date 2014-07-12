@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtractable {
+class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtractable, Sequence {
     
     var elements = [T]()
     
@@ -303,6 +303,10 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
         return self.add(otherSet)
     }
     
+    func generate() -> FiniteSetGenerator<T> {
+        return FiniteSetGenerator<T>(elements: elements[0 ..< elements.count])
+    }
+    
     /**
     *  Getter for subscript based on index.
     */
@@ -317,6 +321,19 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
         }
     }
     
+}
+
+struct FiniteSetGenerator<T: protocol<Equatable, Initable>> : Generator {
+    mutating func next() -> T? {
+        if elements.isEmpty {return nil}
+        
+        let ret = elements[0]
+        elements = elements[1 ..< elements.count]
+        
+        return ret
+    }
+    
+    var elements: Slice<T>
 }
 
 func ==<T: protocol<Equatable, Initable>>(lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> Bool {
