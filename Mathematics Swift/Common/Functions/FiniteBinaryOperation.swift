@@ -80,7 +80,7 @@ class FiniteLeftExternalBinaryOperation<LeftOperand: protocol<Equatable, Initabl
 class FiniteBinaryOperation<T: protocol<Equatable, Initable>> : FiniteFunction<Tuple, T> {
     
     var identityElement: T?
-    // var cayleyTable = ??
+    var myCayleyTable = [[Int]]()
     
     var identity : T? {
         if contains(functionProperties.keys, "identity") == false {
@@ -115,6 +115,32 @@ class FiniteBinaryOperation<T: protocol<Equatable, Initable>> : FiniteFunction<T
     }
     
     // MARK: - Methods
+    
+    func cayleyTableGeneric() -> [[Int]] {
+        if contains(functionProperties.keys, "cayley table") {
+            return myCayleyTable
+        }
+        
+        let domainSize = codomain.cardinality()
+        
+        var result = [[Int]]()
+        
+        for rowIndex in 0 ..< domainSize {
+            for columnIndex in 0 ..< domainSize {
+                var tup = Tuple(size: 2)
+                
+                tup.elements[0] = codomain[rowIndex]
+                tup.elements[1] = codomain[columnIndex]
+                
+                result[rowIndex][columnIndex] = codomain.indexOf(relation.applyMap(tup))
+            }
+        }
+        
+        functionProperties["cayley table"] = true
+        myCayleyTable = result
+        
+        return result
+    }
     
     func isAssociative() -> Bool {
         if contains(functionProperties.keys, "associativity") {
