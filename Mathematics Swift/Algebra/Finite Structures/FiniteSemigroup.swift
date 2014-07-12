@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Semigroup<T: protocol<Equatable, Initable>> : FiniteMagma<T> {
+class FiniteSemigroup<T: protocol<Equatable, Initable>> : FiniteMagma<T> {
     
     var semigroupProperties = [String: Bool]()
     

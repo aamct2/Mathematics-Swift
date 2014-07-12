@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		933014CE1970BBA4004633B3 /* FiniteMonoid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933014CD1970BBA4004633B3 /* FiniteMonoid.swift */; };
 		93336F1E196E0958009C0E1D /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93336F1D196E0958009C0E1D /* Matrix.swift */; };
 		9380EFBA196F47BC005E52AC /* FiniteMagma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9380EFB9196F47BC005E52AC /* FiniteMagma.swift */; };
 		93B152B519709D0D0003AE73 /* FiniteSemigroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		933014CD1970BBA4004633B3 /* FiniteMonoid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteMonoid.swift; sourceTree = "<group>"; };
 		93336F1D196E0958009C0E1D /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
 		9380EFB9196F47BC005E52AC /* FiniteMagma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteMagma.swift; sourceTree = "<group>"; };
 		93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteSemigroup.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				9380EFB9196F47BC005E52AC /* FiniteMagma.swift */,
+				933014CD1970BBA4004633B3 /* FiniteMonoid.swift */,
 				93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */,
 			);
 			path = "Finite Structures";
@@ -303,6 +306,7 @@
 			files = (
 				93C296AF19523D9100CEF01B /* Common Protocols.swift in Sources */,
 				93D6268E196CB1D600D8258E /* MathMap.swift in Sources */,
+				933014CE1970BBA4004633B3 /* FiniteMonoid.swift in Sources */,
 				9380EFBA196F47BC005E52AC /* FiniteMagma.swift in Sources */,
 				93336F1E196E0958009C0E1D /* Matrix.swift in Sources */,
 				93F9EBC3196B5D2B00F54629 /* FiniteSet.swift in Sources */,
