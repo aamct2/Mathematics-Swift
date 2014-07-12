@@ -7,9 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		93336F1E196E0958009C0E1D /* Matrix.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93336F1D196E0958009C0E1D /* Matrix.swift */; };
+		9380EFBA196F47BC005E52AC /* FiniteMagma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9380EFB9196F47BC005E52AC /* FiniteMagma.swift */; };
+		93B152B519709D0D0003AE73 /* FiniteSemigroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */; };
+		93B1E94F196BAC490090FEB5 /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B1E94E196BAC490090FEB5 /* Tuple.swift */; };
+		93B66FBC196CD31D00E0F0B9 /* FiniteBinaryOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B66FBB196CD31D00E0F0B9 /* FiniteBinaryOperation.swift */; };
 		93C29692195239C500CEF01B /* Mathematics Swift.h in Headers */ = {isa = PBXBuildFile; fileRef = 93C29691195239C500CEF01B /* Mathematics Swift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		93C29698195239C500CEF01B /* Mathematics Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93C2968C195239C500CEF01B /* Mathematics Swift.framework */; };
 		93C2969F195239C500CEF01B /* Mathematics_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C2969E195239C500CEF01B /* Mathematics_SwiftTests.swift */; };
+		93C296AF19523D9100CEF01B /* Common Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C296AE19523D9100CEF01B /* Common Protocols.swift */; };
+		93C296B11952405000CEF01B /* IntegerNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C296B01952405000CEF01B /* IntegerNumber.swift */; };
+		93C296B61952530C00CEF01B /* OrderedPair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C296B51952530C00CEF01B /* OrderedPair.swift */; };
+		93D6268E196CB1D600D8258E /* MathMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D6268D196CB1D600D8258E /* MathMap.swift */; };
+		93D62690196CB52A00D8258E /* FiniteFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93D6268F196CB52A00D8258E /* FiniteFunction.swift */; };
+		93F9EBC3196B5D2B00F54629 /* FiniteSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93F9EBC2196B5D2B00F54629 /* FiniteSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +34,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		93336F1D196E0958009C0E1D /* Matrix.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Matrix.swift; sourceTree = "<group>"; };
+		9380EFB9196F47BC005E52AC /* FiniteMagma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteMagma.swift; sourceTree = "<group>"; };
+		93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteSemigroup.swift; sourceTree = "<group>"; };
+		93B1E94E196BAC490090FEB5 /* Tuple.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tuple.swift; sourceTree = "<group>"; };
+		93B66FBB196CD31D00E0F0B9 /* FiniteBinaryOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteBinaryOperation.swift; sourceTree = "<group>"; };
 		93C2968C195239C500CEF01B /* Mathematics Swift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "Mathematics Swift.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93C29690195239C500CEF01B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93C29691195239C500CEF01B /* Mathematics Swift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mathematics Swift.h"; sourceTree = "<group>"; };
 		93C29697195239C500CEF01B /* Mathematics SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Mathematics SwiftTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93C2969D195239C500CEF01B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		93C2969E195239C500CEF01B /* Mathematics_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mathematics_SwiftTests.swift; sourceTree = "<group>"; };
+		93C296AE19523D9100CEF01B /* Common Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Common Protocols.swift"; sourceTree = "<group>"; };
+		93C296B01952405000CEF01B /* IntegerNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntegerNumber.swift; sourceTree = "<group>"; };
+		93C296B2195250D700CEF01B /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; };
+		93C296B51952530C00CEF01B /* OrderedPair.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderedPair.swift; sourceTree = "<group>"; };
+		93D6268D196CB1D600D8258E /* MathMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathMap.swift; sourceTree = "<group>"; };
+		93D6268F196CB52A00D8258E /* FiniteFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteFunction.swift; sourceTree = "<group>"; };
+		93F9EBC2196B5D2B00F54629 /* FiniteSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiniteSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +73,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9380EFB8196F4797005E52AC /* Finite Structures */ = {
+			isa = PBXGroup;
+			children = (
+				9380EFB9196F47BC005E52AC /* FiniteMagma.swift */,
+				93B152B419709D0D0003AE73 /* FiniteSemigroup.swift */,
+			);
+			path = "Finite Structures";
+			sourceTree = "<group>";
+		};
 		93C29682195239C500CEF01B = {
 			isa = PBXGroup;
 			children = (
@@ -71,6 +103,10 @@
 		93C2968E195239C500CEF01B /* Mathematics Swift */ = {
 			isa = PBXGroup;
 			children = (
+				93C296A819523D1000CEF01B /* Algebra */,
+				93C296A919523D1500CEF01B /* Common */,
+				93C296AA19523D1C00CEF01B /* Geometry */,
+				93C296AB19523D2200CEF01B /* Topology */,
 				93C29691195239C500CEF01B /* Mathematics Swift.h */,
 				93C2968F195239C500CEF01B /* Supporting Files */,
 			);
@@ -100,6 +136,61 @@
 				93C2969D195239C500CEF01B /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		93C296A819523D1000CEF01B /* Algebra */ = {
+			isa = PBXGroup;
+			children = (
+				9380EFB8196F4797005E52AC /* Finite Structures */,
+				93336F1D196E0958009C0E1D /* Matrix.swift */,
+			);
+			path = Algebra;
+			sourceTree = "<group>";
+		};
+		93C296A919523D1500CEF01B /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				93C296AC19523D6200CEF01B /* Functions */,
+				93C296AD19523D6A00CEF01B /* Sets */,
+				93C296AE19523D9100CEF01B /* Common Protocols.swift */,
+				93C296B2195250D700CEF01B /* Playground.playground */,
+				93C296B01952405000CEF01B /* IntegerNumber.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		93C296AA19523D1C00CEF01B /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Geometry;
+			sourceTree = "<group>";
+		};
+		93C296AB19523D2200CEF01B /* Topology */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Topology;
+			sourceTree = "<group>";
+		};
+		93C296AC19523D6200CEF01B /* Functions */ = {
+			isa = PBXGroup;
+			children = (
+				93B66FBB196CD31D00E0F0B9 /* FiniteBinaryOperation.swift */,
+				93D6268F196CB52A00D8258E /* FiniteFunction.swift */,
+				93D6268D196CB1D600D8258E /* MathMap.swift */,
+			);
+			path = Functions;
+			sourceTree = "<group>";
+		};
+		93C296AD19523D6A00CEF01B /* Sets */ = {
+			isa = PBXGroup;
+			children = (
+				93F9EBC2196B5D2B00F54629 /* FiniteSet.swift */,
+				93C296B51952530C00CEF01B /* OrderedPair.swift */,
+				93B1E94E196BAC490090FEB5 /* Tuple.swift */,
+			);
+			path = Sets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -210,6 +301,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				93C296AF19523D9100CEF01B /* Common Protocols.swift in Sources */,
+				93D6268E196CB1D600D8258E /* MathMap.swift in Sources */,
+				9380EFBA196F47BC005E52AC /* FiniteMagma.swift in Sources */,
+				93336F1E196E0958009C0E1D /* Matrix.swift in Sources */,
+				93F9EBC3196B5D2B00F54629 /* FiniteSet.swift in Sources */,
+				93B66FBC196CD31D00E0F0B9 /* FiniteBinaryOperation.swift in Sources */,
+				93C296B11952405000CEF01B /* IntegerNumber.swift in Sources */,
+				93C296B61952530C00CEF01B /* OrderedPair.swift in Sources */,
+				93B1E94F196BAC490090FEB5 /* Tuple.swift in Sources */,
+				93B152B519709D0D0003AE73 /* FiniteSemigroup.swift in Sources */,
+				93D62690196CB52A00D8258E /* FiniteFunction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,6 +422,7 @@
 		93C296A3195239C500CEF01B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -329,12 +432,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		93C296A4195239C500CEF01B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -398,6 +503,7 @@
 				93C296A4195239C500CEF01B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		93C296A5195239C500CEF01B /* Build configuration list for PBXNativeTarget "Mathematics SwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -406,6 +512,7 @@
 				93C296A7195239C500CEF01B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
