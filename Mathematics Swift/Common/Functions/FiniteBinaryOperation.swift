@@ -132,7 +132,7 @@ class FiniteBinaryOperation<T: protocol<Equatable, Initable>> : FiniteFunction<T
                 tup.elements[0] = codomain[rowIndex]
                 tup.elements[1] = codomain[columnIndex]
                 
-                result[rowIndex][columnIndex] = codomain.indexOf(relation.applyMap(tup))
+                result[rowIndex][columnIndex] = codomain.indexOf(relation.applyMap(tup)!)
             }
         }
         

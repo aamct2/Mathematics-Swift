@@ -24,7 +24,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
         self.codomain = codomain
         
         for index in 0..<self.domain.cardinality() {
-            if contains(self.codomain.elements, relation.applyMap(self.domain[index])) == false {
+            if contains(self.codomain.elements, relation.applyMap(self.domain[index])!) == false {
                 fatalError("The codomain does not contain the output element for the domain element.")
             }
         }
@@ -34,7 +34,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
     
     // MARK: - Methods
     
-    func applyMap(input: T) -> G {
+    func applyMap(input: T) -> G? {
         assert(contains(domain.elements, input), "Domain does not contain input element!")
         
         // No need to check if the output is in the codomain.
@@ -125,7 +125,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
             var imgSet = FiniteSet<G>()
             
             for domIndex in 0..<self.domain.cardinality() {
-                imgSet.elements += self.applyMap(self.domain[domIndex])
+                imgSet.elements += self.applyMap(self.domain[domIndex])!
             }
             
             image = imgSet
@@ -178,7 +178,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
             for index in 0..<self.domain.cardinality() {
                 var input = self.domain[index]
                 
-                inverseRelation.elements += OrderedPair<G, T>(x: self.applyMap(input), y: input)
+                inverseRelation.elements += OrderedPair<G, T>(x: self.applyMap(input)!, y: input)
             } // End For index
             
             var inverseMap = SetDefinedMap<G, T>(relation: inverseRelation)
@@ -193,7 +193,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
     class func isFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, Initable>>(testDomain: FiniteSet<T>, testCodomain: FiniteSet<G>, testRelation: MathMap<T, G>) -> Bool {
         
         for index in 0 ..< testDomain.cardinality() {
-            if contains(testCodomain.elements, testRelation.applyMap(testDomain[index])) == false {
+            if contains(testCodomain.elements, testRelation.applyMap(testDomain[index])!) == false {
                 return false
             }
         }

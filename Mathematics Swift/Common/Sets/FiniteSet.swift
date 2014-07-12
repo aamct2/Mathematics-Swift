@@ -217,6 +217,21 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     }
     
     /**
+    *  Determines whether this set is a proper subset of a given set.
+    *
+    *  @param superSet Superset to test against.
+    *
+    *  @return Whether this set is a proper subset of the superset.
+    */
+    func isProperSubsetOf(superSet: FiniteSet<T>) -> Bool {
+        if self.isSubsetOf(superSet) == true && self.equals(superSet) == false {
+            return true
+        }
+        
+        return false
+    }
+    
+    /**
     *  Determines whether this set is a subset of another set.
     *
     *  @param superSet

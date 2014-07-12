@@ -48,12 +48,12 @@ class FiniteMonoid<T: protocol<Equatable, Initable>> : FiniteSemigroup<T> {
                 var tup1 = Tuple(size: 2)
                 tup1.elements[0] = self.mySet[index1]
                 tup1.elements[1] = self.mySet[index2]
-                var lhs = testFunction.applyMap(self.applyOperation(tup1))
+                var lhs = testFunction.applyMap(self.applyOperation(tup1)!)!
                 
                 var tup2 = Tuple(size: 2)
-                tup2.elements[0] = testFunction.applyMap(self.mySet[index1])
-                tup2.elements[1] = testFunction.applyMap(self.mySet[index2])
-                var rhs = testFunction.applyMap(self.applyOperation(tup2))
+                tup2.elements[0] = testFunction.applyMap(self.mySet[index1])!
+                tup2.elements[1] = testFunction.applyMap(self.mySet[index2])!
+                var rhs = testFunction.applyMap(self.applyOperation(tup2)!)!
                 
                 if !(lhs == rhs) {
                     return false

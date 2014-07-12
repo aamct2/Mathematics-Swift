@@ -127,10 +127,10 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             
             tup1.elements[0] = mySet[index]
             tup1.elements[1] = elem
-            tup2.elements[0] = applyOperation(tup1)
+            tup2.elements[0] = applyOperation(tup1)!
             tup2.elements[1] = operation.inverseElement(mySet[index])!
             
-            newSet.addElement(applyOperation(tup2))
+            newSet.addElement(applyOperation(tup2)!)
         }
         
         return newSet
@@ -153,12 +153,35 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         tup1.elements[0] = self.operation.inverseElement(lhs)!
         tup1.elements[1] = self.operation.inverseElement(rhs)!
-        tup2.elements[0] = self.operation.applyMap(tup1)
+        tup2.elements[0] = self.operation.applyMap(tup1)!
         tup2.elements[1] = lhs
-        tup3.elements[0] = self.operation.applyMap(tup2)
+        tup3.elements[0] = self.operation.applyMap(tup2)!
         tup3.elements[1] = rhs
         
-        return self.applyOperation(tup3)
+        return self.applyOperation(tup3)!
+    }
+    
+    /**
+    *  Returns the derived subgroup (also known as the commutator subgroup) of this group. In other words, the group whose elements are all the possible commutators of this group.
+    *
+    *  @return Returns the derived subgroup.
+    */
+    func derivedSubgroup() -> FiniteGroup<T>? {
+        var generatorSet = FiniteSet<T>()
+        
+        for index1 in 0 ..< self.order() {
+            for index2 in 0 ..< self.order() {
+                generatorSet.addElement(self.commutator(mySet[index1], rhs: mySet[index2]))
+            }
+        }
+        
+        if let newSet = FiniteGroup.generatedSet(generatorSet, theMap: self.operation.relation) {
+            var newOperation = self.operation.restriction(newSet)!
+            
+            return FiniteGroup(mySet: newSet, operation: newOperation, knownProperties: self.subgroupClosedProperties())
+        }
+        
+        return nil
     }
     
     /**
@@ -174,6 +197,42 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         if self.order(elem) == self.order() { return true }
         
         return false
+    }
+    
+    class func generatedSet<T: protocol<Equatable, Initable>>(generatorSet: FiniteSet<T>, theMap: MathMap<Tuple, T>) -> FiniteSet<T>? {
+        
+        var cycleIndex = 0
+        
+        var result = FiniteSet<T>()
+        result = generatorSet.clone()
+        
+        while cycleIndex < 3000 {
+            var foundNewElement = false
+            
+            for var index1 = result.cardinality() - 1; index1 >= 0; --index1 {
+                var curTup = Tuple(size: 2)
+                curTup.elements[0] = result[index1]
+                
+                for var index2 = result.cardinality() - 1; index2 >= 0; --index2 {
+                    curTup.elements[1] = result[index2]
+                    
+                    if let curElem = theMap.applyMap(curTup) {
+                        if contains(result.elements, curElem) == false {
+                            result.addElement(curElem)
+                            foundNewElement = true
+                        }
+                    }
+                } // End For index2
+            } // End For index1
+            
+            if foundNewElement == false {
+                return result
+            }
+            
+            cycleIndex += 1
+        } // End While
+        
+        return nil
     }
     
     /**
@@ -230,7 +289,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             
             tup1.elements[0] = mySet[index]
             tup1.elements[1] = lhs
-            tup2.elements[0] = applyOperation(tup1)
+            tup2.elements[0] = applyOperation(tup1)!
             tup2.elements[1] = operation.inverseElement(mySet[index])!
             
             if applyOperation(tup2) == rhs {
@@ -335,13 +394,37 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
+    *  Determines whether this group is a maximal subgroup of a given group. A maximal subgroup is a proper subgroup that is not strictly contained by any other proper subgroup.
+    *
+    *  @param superGroup The supergroup (or ambient group) to test if this group is a maximal subgroup of it.
+    *
+    *  @return Returns **true** if the group is a maximal subgroup of a given group, **false** otherwise.
+    */
+    func isMaximalSubgroupOf(superGroup: FiniteGroup<T>) -> Bool {
+        // Check to make sure it is a proper subgroup
+        if self.isProperSubgroupOf(superGroup) == false { return false }
+        
+        // Check to make sure no other proper subgroup strictly contains this group
+        var allSupergroupSubgroups = superGroup.setOfAllSubgroups()
+        for subgroup in allSupergroupSubgroups {
+            if !(self == subgroup) {
+                if subgroup.mySet.isProperSubsetOf(superGroup.mySet) && self.isSubgroupOf(subgroup) {
+                    return false
+                }
+            }
+        }
+        
+        return true
+    }
+    
+    /**
     *  Determines whether this group is a normal subgroup of another group. A subgroup is normal if and only if all left and right cosets coincide.
     *
     *  @param superGroup The supergroup (or ambient group) to test if this group is a normal subgroup of it.
     *
     *  @return Returns **true** if the group is a normal subgroup of a given group, **false** otherwise.
     */
-    func isNormalSubgroup(superGroup: FiniteGroup<T>) -> Bool {
+    func isNormalSubgroupOf(superGroup: FiniteGroup<T>) -> Bool {
         // First check to make sure it is a subgroup
         if self.isSubgroupOf(superGroup) == false { return false }
         
@@ -357,6 +440,43 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
                 return false
             }
         }
+        
+        return true
+    }
+    
+    /**
+    *  Determines whether this group is perfect. In other words, it is equal to its derived subgroup.
+    *
+    *  @return Returns **true** if the group is perfect, **false** otherwise.
+    */
+    func isPerfect() -> Bool {
+        if !(contains(groupProperties.keys, "perfect")) {
+            if let myDerivedSubgroup = self.derivedSubgroup() {
+                if self == myDerivedSubgroup {
+                    groupProperties["perfect"] = true
+                    return true
+                }
+            }
+            
+            groupProperties["perfect"] = false
+        }
+        
+        return groupProperties["perfect"]!
+    }
+    
+    /**
+    *  Determines whether this group is a proper subgroup of a given group. In other words it is a subgroup but not equal to the whole group.
+    *
+    *  @param superGroup The supergroup (or ambient group) to test if this group is a proper subgroup of it.
+    *
+    *  @return Returns **true** if the group is a proper subgroup of a given group, **false** otherwise.
+    */
+    func isProperSubgroupOf(superGroup: FiniteGroup<T>) -> Bool {
+        // Check to make sure it is a subgroup
+        if self.isSubgroupOf(superGroup) == false { return false }
+        
+        // Check to make sure it's a proper subgroup
+        if self.mySet.isProperSubsetOf(superGroup.mySet) == false { return false }
         
         return true
     }
@@ -403,7 +523,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             curTup.elements[0] = elem
             curTup.elements[1] = subgroup.mySet[index]
             
-            newSet.addElement(self.applyOperation(curTup))
+            newSet.addElement(self.applyOperation(curTup)!)
         }
         
         return newSet
@@ -449,7 +569,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             var curTup = Tuple(size: 2)
             curTup.elements[0] = curPwr
             curTup.elements[1] = self.power(elem, exponent: possibleOrders[index] - possibleOrders[index - 1])
-            curPwr = self.applyOperation(curTup)
+            curPwr = self.applyOperation(curTup)!
             
             if curPwr == self.identity {
                 return possibleOrders[index]
@@ -457,6 +577,33 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         }
         
         fatalError("Error: Could not find order of element?! There must be a problem with the code.")
+    }
+    
+    /**
+    *  Returns the perfect core of the group. In other words, its largest perfect subgroup.
+    *
+    *  @return Returns the perfect core of the group.
+    */
+    func perfectCore() -> FiniteGroup<T> {
+        var allMySubgroups = self.setOfAllSubgroups()
+        var perfectSubgroups = FiniteSet<FiniteGroup<T>>()
+        
+        // Find all the perfect subgroups
+        for subgroup in allMySubgroups {
+            if subgroup.isPerfect() {
+                perfectSubgroups.addElement(subgroup)
+            }
+        }
+        
+        // Find the largest one
+        var largestIndex = 0
+        for index in 0 ..< perfectSubgroups.cardinality() {
+            if perfectSubgroups[index].order() > perfectSubgroups[largestIndex].order() {
+                largestIndex = index
+            }
+        }
+        
+        return perfectSubgroups[largestIndex]
     }
     
     /**
@@ -479,20 +626,20 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         if curExponent % 2 == 1 {
             curTup.elements[0] = x
             curTup.elements[1] = g
-            x = self.applyOperation(curTup)
+            x = self.applyOperation(curTup)!
         }
         
         while curExponent > 1 {
             curTup.elements[0] = g
             curTup.elements[1] = g
-            g = self.applyOperation(curTup)
+            g = self.applyOperation(curTup)!
             
             curExponent = curExponent / 2
             
             if curExponent % 2 == 1 {
                 curTup.elements[0] = x
                 curTup.elements[1] = g
-                x = self.applyOperation(curTup)
+                x = self.applyOperation(curTup)!
             }
         }
         
@@ -519,7 +666,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             curTup.elements[0] = subgroup.mySet[index]
             curTup.elements[1] = elem
             
-            newSet.addElement(self.applyOperation(curTup))
+            newSet.addElement(self.applyOperation(curTup)!)
         }
         
         return newSet
@@ -535,6 +682,25 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         for index in 0 ..< mySet.cardinality() {
             newSet.addElement(self.conjugacyClass(mySet[index]))
+        }
+        
+        return newSet
+    }
+    
+    /**
+    *  Returns the set of all maximal subgroups of this group (does NOT include improper subgroups). A maximal subgroup is a proper subgroup that is not strictly contained by any other proper subgroup.
+    *
+    *  @return The set of all maximal subgroups.
+    */
+    func setOfAllMaximalSubgroups() -> FiniteSet<FiniteGroup<T>> {
+        var newSet = FiniteSet<FiniteGroup<T>>()
+        
+        var subgroups = setOfAllSubgroups()
+        
+        for subgroup in subgroups {
+            if subgroup.isMaximalSubgroupOf(self) {
+                newSet.addElement(subgroup)
+            }
         }
         
         return newSet
@@ -560,7 +726,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             var newSet = FiniteSet<FiniteGroup<T>>()
             
             for subgroup in subgroups {
-                if subgroup.isNormalSubgroup(self) {
+                if subgroup.isNormalSubgroupOf(self) {
                     newSet.addElement(subgroup)
                 }
             }

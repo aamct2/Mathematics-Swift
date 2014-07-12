@@ -9,7 +9,7 @@
 import Foundation
 
 class MathMap<T: protocol<Equatable, Initable>, G: protocol<Equatable, Initable>> {
-    func applyMap(input: T) -> G {
+    func applyMap(input: T) -> G? {
         // TODO: Finish
         
         return G()
@@ -44,8 +44,12 @@ class CompositionMap<T: protocol<Equatable, Initable>, Intermediary: protocol<Eq
         self.outerMap = outerMap
     }
     
-    override func applyMap(input: T) -> G  {
-        return outerMap.applyMap(innerMap.applyMap(input))
+    override func applyMap(input: T) -> G?  {
+        if let innerValue = innerMap.applyMap(input) {
+            return outerMap.applyMap(innerValue)
+        }
+        
+        return nil
     }
     
 }

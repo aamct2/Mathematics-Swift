@@ -35,7 +35,7 @@ class FiniteMagma<T: protocol<Equatable, Initable>> {
     *
     *  @return The output of the operation applied to the given input.
     */
-    func applyOperation(input: Tuple) -> T {
+    func applyOperation(input: Tuple) -> T? {
         return operation.applyMap(input)
     }
     
@@ -68,7 +68,7 @@ class FiniteMagma<T: protocol<Equatable, Initable>> {
                 curTup.elements[0] = curElem
                 curTup.elements[1] = curElem
                 
-                result.elements += self.operation.applyMap(curTup)
+                result.elements += self.operation.applyMap(curTup)!
             }
             
             allSquareElements = result
