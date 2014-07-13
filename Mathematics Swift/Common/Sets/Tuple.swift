@@ -46,6 +46,6 @@ class Tuple : Equatable, Initable {
     
 }
 
-func ==(lhs: Tuple, rhs: Tuple) -> Bool {
+func == (lhs: Tuple, rhs: Tuple) -> Bool {
     return lhs.equals(rhs)
 }

@@ -56,34 +56,34 @@ class IntegerNumber : Initable, ISubtractable, IMultipliable, IMultiplicativeIde
 
 // MARK: - Operators
 
-func +(lhs: IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
+func + (lhs: IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
     return lhs.add(rhs)
 }
 
-func -(lhs:IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
+func - (lhs:IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
     return lhs.subtract(rhs)
 }
 
-func *(lhs: IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
+func * (lhs: IntegerNumber, rhs: IntegerNumber) -> IntegerNumber {
     return lhs.multiply(rhs)
 }
 
-func <=(lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
+func <= (lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
     return (lhs.value <= rhs.value)
 }
 
-func >=(lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
+func >= (lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
     return (lhs.value >= rhs.value)
 }
 
-func <(lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
+func < (lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
     return (lhs.value < rhs.value)
 }
 
-func >(lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
+func > (lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
     return (lhs.value > rhs.value)
 }
 
-func ==(lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
+func == (lhs: IntegerNumber, rhs: IntegerNumber) -> Bool {
     return (lhs.value == rhs.value)
 }

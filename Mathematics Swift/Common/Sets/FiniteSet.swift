@@ -351,14 +351,14 @@ struct FiniteSetGenerator<T: protocol<Equatable, Initable>> : Generator {
     var elements: Slice<T>
 }
 
-func ==<T: protocol<Equatable, Initable>>(lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> Bool {
+func == <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> Bool {
     return lhs.equals(rhs)
 }
 
-func +<T: protocol<Equatable, Initable>>(lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
+func + <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
     return lhs.union(rhs)
 }
 
-func -<T: protocol<Equatable, Initable>>(lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
+func - <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
     return lhs.difference(rhs)
 }

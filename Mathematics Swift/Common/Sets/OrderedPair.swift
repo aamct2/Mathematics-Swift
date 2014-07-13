@@ -25,7 +25,7 @@ class OrderedPair<XType: protocol<Equatable, Initable>, YType: protocol<Equatabl
     
 }
 
-func ==<XType: protocol<Equatable, Initable>, YType: protocol<Equatable, Initable>>(lhs: OrderedPair<XType, YType>, rhs: OrderedPair<XType, YType>) -> Bool {
+func == <XType: protocol<Equatable, Initable>, YType: protocol<Equatable, Initable>> (lhs: OrderedPair<XType, YType>, rhs: OrderedPair<XType, YType>) -> Bool {
     
     if lhs.x == rhs.x && lhs.y == rhs.y { return true }
     
