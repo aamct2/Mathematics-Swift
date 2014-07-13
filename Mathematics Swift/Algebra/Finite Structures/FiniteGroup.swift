@@ -354,23 +354,6 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
-    *  Determines whether or not this group is a Hamiltonian group. In other words, a non-abelian Dedekind group.
-    *
-    *  @return Returns **true** if the group is a Hamiltonian group, **false** otherwise.
-    */
-    func isHamiltonian() -> Bool {
-        if !(contains(groupProperties.keys, "hamiltonian")) {
-            if self.isDedekind() == true && self.isAbelian() == false {
-                groupProperties["hamiltonian"] = true
-            } else {
-                groupProperties["hamiltonian"] = false
-            }
-        }
-        
-        return groupProperties["hamiltonian"]!
-    }
-    
-    /**
     *  Determines whether a given finite set and operation will form a finite group.
     *
     *  @param testSet The finite set to test.
@@ -391,6 +374,48 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     */
     class func isGroup(testMonoid: FiniteMonoid<T>) -> Bool {
         return testMonoid.operation.hasInverses()
+    }
+    
+    /**
+    *  Determines whether or not this group is a Hamiltonian group. In other words, a non-abelian Dedekind group.
+    *
+    *  @return Returns **true** if the group is a Hamiltonian group, **false** otherwise.
+    */
+    func isHamiltonian() -> Bool {
+        if !(contains(groupProperties.keys, "hamiltonian")) {
+            if self.isDedekind() == true && self.isAbelian() == false {
+                groupProperties["hamiltonian"] = true
+            } else {
+                groupProperties["hamiltonian"] = false
+            }
+        }
+        
+        return groupProperties["hamiltonian"]!
+    }
+    
+    /**
+    *  Determines whether the group is hypoabelian. In other words, that its perfect core is trivial.
+    *
+    *  @return Returns **true** if the group is hypoabelian, **false** otherwise.
+    */
+    func isHypoabelian() -> Bool {
+        if !(contains(groupProperties.keys, "hypoabelian")) {
+            // Solvable implies hypoabelian, check to see if we've calculated that already.
+            if contains(groupProperties.keys, "solvable") {
+                if groupProperties["solvable"] {
+                    groupProperties["hypoabelian"] = true
+                    return true
+                }
+            }
+            
+            if perfectCore() == trivialSubgroup() {
+                groupProperties["hypoabelian"] = true
+            } else {
+                groupProperties["hypoabelian"] = false
+            }
+        }
+        
+        return groupProperties["hypoabelian"]!
     }
     
     /**
@@ -479,6 +504,25 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         if self.mySet.isProperSubsetOf(superGroup.mySet) == false { return false }
         
         return true
+    }
+    
+    /**
+    *  Determines whether this group is simple. In other words, if this group's only normal subgroups is the group itself and the trivial subgroup.
+    *
+    *  @return Returns **true** if the group is simple, **false** otherwise.
+    */
+    func isSimple() -> Bool {
+        if !(contains(groupProperties.keys, "simple")) {
+            // Check to make sure the group's only normal subgroups are itself and the trivial subgroup
+            // And check to make sure it is not the trivial group itself
+            if self.setOfAllNormalSubgroups().cardinality() <= 2 && self.order() > 1 {
+                groupProperties["simple"] = true
+            } else {
+                groupProperties["simple"] = false
+            }
+        }
+        
+        return groupProperties["simple"]!
     }
     
     /**
