@@ -874,6 +874,8 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
 
     // MARK: - Custom Maps
     
+    // TODO: Fix
+    /*
     class QuotientMap<T: protocol<Equatable, Initable>> : MathMap<Tuple, FiniteSet<T>> {
         var groupMap: MathMap<Tuple, T>
         
@@ -904,7 +906,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             return newSet
         }
     }
-    
+    */
 }
 
 func == <T: protocol<Equatable, Initable>> (lhs: FiniteGroup<T>, rhs: FiniteGroup<T>) -> Bool {
