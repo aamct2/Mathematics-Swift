@@ -291,41 +291,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         return nil
     }
     
-    /**
-    *  Determines whether this group is abelian. In other words, if its operation is commutative.
-    *
-    *  @return Returns **true** if the group is abelian, **false** otherwise.
-    */
-    func isAbelian() -> Bool {
-        if contains(groupProperties.keys, "abelian") == false {
-            groupProperties["abelian"] = self.operation.isCommutative()
-        }
-        
-        return groupProperties["abelian"]!
-    }
     
-    /**
-    *  Determines whether this group is ambivalent. In other words, if every element and its inverse are conjugates.
-    *
-    *  @return Returns **true** if the group is ambivalent, **false** otherwise.
-    */
-    func isAmbivalent() -> Bool {
-        if contains(groupProperties.keys, "ambivalent") == false {
-            for index in 0 ..< self.order() {
-                var curElem = mySet[index]
-                var curInverse = operation.inverseElement(curElem)!
-                
-                if self.isConjugate(lhs: curElem, rhs: curInverse) == false {
-                    groupProperties["ambivalen"] = false
-                    return false
-                }
-            }
-            
-            groupProperties["ambivalen"] = true
-        }
-        
-        return groupProperties["ambivalent"]!
-    }
     
     /**
     *  Determines whether two elements of the group are conjugate to eachother. Two elements A and B are conjugate if there exists a G such that G + A + G^-1 = B.
@@ -356,58 +322,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         return false
     }
     
-    /**
-    *  Determines whether or not this group is cyclic.
-    *
-    *  @return Returns **true** if the group is cyclic, **false** otherwise.
-    */
-    func isCyclic() -> Bool {
-        if contains(groupProperties.keys, "cyclic") == false {
-            for index in 0 ..< self.order() {
-                if self.generatesGroup(mySet[index]) {
-                    groupProperties["cyclic"] = true
-                    return true
-                }
-            }
-            
-            groupProperties["cyclic"] = false
-        }
-        
-        return groupProperties["cyclic"]!
-    }
     
-    /**
-    *  Determines whether or not this group is a Dedekind group. In other words, that all its subgroups are normal.
-    *
-    *  @return Returns **true** if the group is a Dedekind group, **false** otherwise.
-    */
-    func isDedekind() -> Bool {
-        if contains(groupProperties.keys, "dedekind") == false {
-            // Abelian implies Dedekind, check to see if we've calculated that already.
-            if contains(groupProperties.keys, "abelian") {
-                if groupProperties["abelian"] {
-                    groupProperties["dedekind"] = true
-                    return true
-                }
-            }
-            
-            // Nilpotent + T-Group implies Dedekind, check to see if we've calculated that already.
-            if contains(groupProperties.keys, "nilpotent") && contains(groupProperties.keys, "t-group") {
-                if groupProperties["nilpotent"] && groupProperties["t-group"] {
-                    groupProperties["dedekind"] = true
-                    return true
-                }
-            }
-            
-            if setOfAllSubgroups() == setOfAllNormalSubgroups() {
-                groupProperties["dedekind"] = true
-            } else {
-                groupProperties["dedekind"] = false
-            }
-        }
-        
-        return groupProperties["dedekind"]!
-    }
     
     /**
     *  Determines whether a given finite set and operation will form a finite group.
@@ -433,46 +348,23 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
-    *  Determines whether or not this group is a Hamiltonian group. In other words, a non-abelian Dedekind group.
+    *  Determines whether a function is a homomorphism from this group to another group.
     *
-    *  @return Returns **true** if the group is a Hamiltonian group, **false** otherwise.
+    *  @param codomain The other group (which forms the codomain of the function).
+    *  @param testFunction The function to test whether or not it is a homomorphism.
+    *
+    *  @return Returns **true** if the function is a group homomorphism, **false** otherwise.
     */
-    func isHamiltonian() -> Bool {
-        if contains(groupProperties.keys, "hamiltonian") == false {
-            if self.isDedekind() == true && self.isAbelian() == false {
-                groupProperties["hamiltonian"] = true
-            } else {
-                groupProperties["hamiltonian"] = false
-            }
-        }
+    func isHomomorphism<G : protocol<Equatable, Initable>>(codomain: FiniteGroup<G>, testFunction: FiniteFunction<T, G>) -> Bool {
+        assert(testFunction.codomain == codomain.mySet, "The codomain of of the parameter 'testFunction' is not the parameter 'codomain'.")
+        assert(testFunction.domain == self.mySet, "The domain of of the parameter 'testFunction' is not this group.")
         
-        return groupProperties["hamiltonian"]!
+        // Check to see that it is a homomorphism of the underlying monoids
+        var result = super.isHomomorphism(codomain, testFunction: testFunction)
+        
+        return result
     }
     
-    /**
-    *  Determines whether the group is hypoabelian. In other words, that its perfect core is trivial.
-    *
-    *  @return Returns **true** if the group is hypoabelian, **false** otherwise.
-    */
-    func isHypoabelian() -> Bool {
-        if contains(groupProperties.keys, "hypoabelian") == false {
-            // Solvable implies hypoabelian, check to see if we've calculated that already.
-            if contains(groupProperties.keys, "solvable") {
-                if groupProperties["solvable"] {
-                    groupProperties["hypoabelian"] = true
-                    return true
-                }
-            }
-            
-            if perfectCore() == trivialSubgroup() {
-                groupProperties["hypoabelian"] = true
-            } else {
-                groupProperties["hypoabelian"] = false
-            }
-        }
-        
-        return groupProperties["hypoabelian"]!
-    }
     
     /**
     *  Determines whether this group is a maximal subgroup of a given group. A maximal subgroup is a proper subgroup that is not strictly contained by any other proper subgroup.
@@ -526,26 +418,6 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     /**
-    *  Determines whether this group is perfect. In other words, it is equal to its derived subgroup.
-    *
-    *  @return Returns **true** if the group is perfect, **false** otherwise.
-    */
-    func isPerfect() -> Bool {
-        if contains(groupProperties.keys, "perfect") == false {
-            if let myDerivedSubgroup = self.derivedSubgroup() {
-                if self == myDerivedSubgroup {
-                    groupProperties["perfect"] = true
-                    return true
-                }
-            }
-            
-            groupProperties["perfect"] = false
-        }
-        
-        return groupProperties["perfect"]!
-    }
-    
-    /**
     *  Determines whether this group is a proper subgroup of a given group. In other words it is a subgroup but not equal to the whole group.
     *
     *  @param superGroup The supergroup (or ambient group) to test if this group is a proper subgroup of it.
@@ -560,25 +432,6 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         if self.mySet.isProperSubsetOf(superGroup.mySet) == false { return false }
         
         return true
-    }
-    
-    /**
-    *  Determines whether this group is simple. In other words, if this group's only normal subgroups is the group itself and the trivial subgroup.
-    *
-    *  @return Returns **true** if the group is simple, **false** otherwise.
-    */
-    func isSimple() -> Bool {
-        if contains(groupProperties.keys, "simple") == false {
-            // Check to make sure the group's only normal subgroups are itself and the trivial subgroup
-            // And check to make sure it is not the trivial group itself
-            if self.setOfAllNormalSubgroups().cardinality() <= 2 && self.order() > 1 {
-                groupProperties["simple"] = true
-            } else {
-                groupProperties["simple"] = false
-            }
-        }
-        
-        return groupProperties["simple"]!
     }
     
     /**
@@ -963,6 +816,181 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         }
     }
     */
+}
+
+// MARK: - FiniteGroup Property Tests
+
+extension FiniteGroup {
+    /**
+    *  Determines whether this group is abelian. In other words, if its operation is commutative.
+    *
+    *  @return Returns **true** if the group is abelian, **false** otherwise.
+    */
+    func isAbelian() -> Bool {
+        if contains(groupProperties.keys, "abelian") == false {
+            groupProperties["abelian"] = self.operation.isCommutative()
+        }
+        
+        return groupProperties["abelian"]!
+    }
+    
+    /**
+    *  Determines whether this group is ambivalent. In other words, if every element and its inverse are conjugates.
+    *
+    *  @return Returns **true** if the group is ambivalent, **false** otherwise.
+    */
+    func isAmbivalent() -> Bool {
+        if contains(groupProperties.keys, "ambivalent") == false {
+            for index in 0 ..< self.order() {
+                var curElem = mySet[index]
+                var curInverse = operation.inverseElement(curElem)!
+                
+                if self.isConjugate(lhs: curElem, rhs: curInverse) == false {
+                    groupProperties["ambivalen"] = false
+                    return false
+                }
+            }
+            
+            groupProperties["ambivalen"] = true
+        }
+        
+        return groupProperties["ambivalent"]!
+    }
+    
+    /**
+    *  Determines whether or not this group is cyclic.
+    *
+    *  @return Returns **true** if the group is cyclic, **false** otherwise.
+    */
+    func isCyclic() -> Bool {
+        if contains(groupProperties.keys, "cyclic") == false {
+            for index in 0 ..< self.order() {
+                if self.generatesGroup(mySet[index]) {
+                    groupProperties["cyclic"] = true
+                    return true
+                }
+            }
+            
+            groupProperties["cyclic"] = false
+        }
+        
+        return groupProperties["cyclic"]!
+    }
+    
+    /**
+    *  Determines whether or not this group is a Dedekind group. In other words, that all its subgroups are normal.
+    *
+    *  @return Returns **true** if the group is a Dedekind group, **false** otherwise.
+    */
+    func isDedekind() -> Bool {
+        if contains(groupProperties.keys, "dedekind") == false {
+            // Abelian implies Dedekind, check to see if we've calculated that already.
+            if contains(groupProperties.keys, "abelian") {
+                if groupProperties["abelian"] {
+                    groupProperties["dedekind"] = true
+                    return true
+                }
+            }
+            
+            // Nilpotent + T-Group implies Dedekind, check to see if we've calculated that already.
+            if contains(groupProperties.keys, "nilpotent") && contains(groupProperties.keys, "t-group") {
+                if groupProperties["nilpotent"] && groupProperties["t-group"] {
+                    groupProperties["dedekind"] = true
+                    return true
+                }
+            }
+            
+            if setOfAllSubgroups() == setOfAllNormalSubgroups() {
+                groupProperties["dedekind"] = true
+            } else {
+                groupProperties["dedekind"] = false
+            }
+        }
+        
+        return groupProperties["dedekind"]!
+    }
+    
+    /**
+    *  Determines whether or not this group is a Hamiltonian group. In other words, a non-abelian Dedekind group.
+    *
+    *  @return Returns **true** if the group is a Hamiltonian group, **false** otherwise.
+    */
+    func isHamiltonian() -> Bool {
+        if contains(groupProperties.keys, "hamiltonian") == false {
+            if self.isDedekind() == true && self.isAbelian() == false {
+                groupProperties["hamiltonian"] = true
+            } else {
+                groupProperties["hamiltonian"] = false
+            }
+        }
+        
+        return groupProperties["hamiltonian"]!
+    }
+    
+    /**
+    *  Determines whether the group is hypoabelian. In other words, that its perfect core is trivial.
+    *
+    *  @return Returns **true** if the group is hypoabelian, **false** otherwise.
+    */
+    func isHypoabelian() -> Bool {
+        if contains(groupProperties.keys, "hypoabelian") == false {
+            // Solvable implies hypoabelian, check to see if we've calculated that already.
+            if contains(groupProperties.keys, "solvable") {
+                if groupProperties["solvable"] {
+                    groupProperties["hypoabelian"] = true
+                    return true
+                }
+            }
+            
+            if perfectCore() == trivialSubgroup() {
+                groupProperties["hypoabelian"] = true
+            } else {
+                groupProperties["hypoabelian"] = false
+            }
+        }
+        
+        return groupProperties["hypoabelian"]!
+    }
+    
+    /**
+    *  Determines whether this group is perfect. In other words, it is equal to its derived subgroup.
+    *
+    *  @return Returns **true** if the group is perfect, **false** otherwise.
+    */
+    func isPerfect() -> Bool {
+        if contains(groupProperties.keys, "perfect") == false {
+            if let myDerivedSubgroup = self.derivedSubgroup() {
+                if self == myDerivedSubgroup {
+                    groupProperties["perfect"] = true
+                    return true
+                }
+            }
+            
+            groupProperties["perfect"] = false
+        }
+        
+        return groupProperties["perfect"]!
+    }
+    
+    /**
+    *  Determines whether this group is simple. In other words, if this group's only normal subgroups is the group itself and the trivial subgroup.
+    *
+    *  @return Returns **true** if the group is simple, **false** otherwise.
+    */
+    func isSimple() -> Bool {
+        if contains(groupProperties.keys, "simple") == false {
+            // Check to make sure the group's only normal subgroups are itself and the trivial subgroup
+            // And check to make sure it is not the trivial group itself
+            if self.setOfAllNormalSubgroups().cardinality() <= 2 && self.order() > 1 {
+                groupProperties["simple"] = true
+            } else {
+                groupProperties["simple"] = false
+            }
+        }
+        
+        return groupProperties["simple"]!
+    }
+
 }
 
 func == <T: protocol<Equatable, Initable>> (lhs: FiniteGroup<T>, rhs: FiniteGroup<T>) -> Bool {
