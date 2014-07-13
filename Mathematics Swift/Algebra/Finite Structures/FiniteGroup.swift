@@ -871,6 +871,39 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         return propertiesSubset(["abelian", "ambivalent", "metabelian", "nilpotent", "perfect", "solvable"], superSet: groupProperties)
     }
+
+    // MARK: - Custom Maps
+    
+    class QuotientMap<T: protocol<Equatable, Initable>> : MathMap<Tuple, FiniteSet<T>> {
+        var groupMap: MathMap<Tuple, T>
+        
+        init(groupMap: MathMap<Tuple, T>) {
+            self.groupMap = groupMap
+        }
+
+        override func applyMap(input: Tuple) -> FiniteSet<T>? {
+            var newSet = FiniteSet<T>()
+            
+            var set1 = input.elements[0] as FiniteSet<T>
+            var set2 = input.elements[1] as FiniteSet<T>
+            
+            for index1 in 0 ..< set1.cardinality() {
+                for index2 in 0 ..< set2.cardinality() {
+                    var curTup = Tuple(size: 2)
+                    curTup.elements[0] = set1[index1]
+                    curTup.elements[1] = set2[index2]
+
+                    if let newElem = self.groupMap.applyMap(curTup) {
+                        newSet.addElement(newElem)
+                    } else {
+                        return nil
+                    }
+                } // End For index2
+            } // End For index1
+
+            return newSet
+        }
+    }
     
 }
 
