@@ -23,7 +23,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
         self.domain = domain
         self.codomain = codomain
         
-        for index in 0..<self.domain.cardinality() {
+        for index in 0 ..< self.domain.cardinality() {
             if contains(self.codomain.elements, relation.applyMap(self.domain[index])!) == false {
                 fatalError("The codomain does not contain the output element for the domain element.")
             }
@@ -82,7 +82,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
             return false
         }
         
-        for index in 0..<self.domain.cardinality() {
+        for index in 0 ..< self.domain.cardinality() {
             if !(self.applyMap(self.domain[index]) == otherFunction.applyMap(self.domain[index])) {
                 return false
             }
@@ -124,7 +124,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
         } else {
             var imgSet = FiniteSet<G>()
             
-            for domIndex in 0..<self.domain.cardinality() {
+            for domIndex in 0 ..< self.domain.cardinality() {
                 imgSet.elements += self.applyMap(self.domain[domIndex])!
             }
             
@@ -144,11 +144,11 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
     func inverseImageSet(resultSet: FiniteSet<G>) -> FiniteSet<T> {
         var invImgSet = FiniteSet<T>()
         
-        for resultSetIndex in 0..<resultSet.cardinality() {
+        for resultSetIndex in 0 ..< resultSet.cardinality() {
             var curResult = resultSet[resultSetIndex]
             
             // TODO: Could be optimized
-            for domIndex in 0..<self.domain.cardinality() {
+            for domIndex in 0 ..< self.domain.cardinality() {
                 if self.applyMap(self.domain[domIndex]) == curResult {
                     invImgSet.elements += self.domain[domIndex]
                 }
@@ -175,7 +175,7 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
             
             var inverseRelation = FiniteSet<OrderedPair<G, T>>()
             
-            for index in 0..<self.domain.cardinality() {
+            for index in 0 ..< self.domain.cardinality() {
                 var input = self.domain[index]
                 
                 inverseRelation.elements += OrderedPair<G, T>(x: self.applyMap(input)!, y: input)
@@ -203,8 +203,8 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
     
     func isInjective() -> Bool {
         if !(contains(functionProperties.keys, "injective")) {
-            for index1 in 0..<self.domain.cardinality() {
-                for index2 in 0..<self.domain.cardinality() {
+            for index1 in 0 ..< self.domain.cardinality() {
+                for index2 in 0 ..< self.domain.cardinality() {
                     if index1 != index2 {
                         if self.applyMap(self.domain[index1]) == self.applyMap(self.domain[index2]) {
                             functionProperties.updateValue(false, forKey: "injective")
@@ -223,10 +223,10 @@ class FiniteFunction<T: protocol<Equatable, Initable>, G: protocol<Equatable, In
     
     func isSurjective() -> Bool {
         if !(contains(functionProperties.keys, "surjective")) {
-            for codomIndex in 0..<self.codomain.cardinality() {
+            for codomIndex in 0 ..< self.codomain.cardinality() {
                 var found = false
                 
-                searchCodomain: for domIndex in 0..<self.domain.cardinality() {
+                searchCodomain: for domIndex in 0 ..< self.domain.cardinality() {
                     if self.applyMap(self.domain[domIndex]) == self.codomain[codomIndex] {
                         found = true
                         break searchCodomain

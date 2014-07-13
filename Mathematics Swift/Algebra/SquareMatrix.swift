@@ -54,8 +54,8 @@ class SquareMatrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Compara
         
         var result = SquareMatrix<T>(rows: self.rows)
         
-        for rowIndex in 0..<self.rows {
-            for colIndex in 0..<self.columns {
+        for rowIndex in 0 ..< self.rows {
+            for colIndex in 0 ..< self.columns {
                 var lhsValue = self[rowIndex, colIndex]
                 var rhsValue = rhs[rowIndex, colIndex]
                 
@@ -71,8 +71,8 @@ class SquareMatrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Compara
         
         var result = SquareMatrix<T>(rows: self.rows)
         
-        for rowIndex in 0..<self.rows {
-            for colIndex in 0..<self.columns {
+        for rowIndex in 0 ..< self.rows {
+            for colIndex in 0 ..< self.columns {
                 var lhsValue = self[rowIndex, colIndex]
                 var rhsValue = rhs[rowIndex, colIndex]
                 
@@ -98,8 +98,8 @@ class SquareMatrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Compara
         var minorRow = 0
         var minorColumn = 0
         
-        for row in 0..<rows {
-            for col in 0..<columns {
+        for row in 0 ..< rows {
+            for col in 0 ..< columns {
                 if row != rowIndex && col != columnIndex {
                     minorMatrix[minorRow, minorColumn] = self[row, col]
                     
@@ -143,8 +143,8 @@ class SquareMatrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Compara
         
         var result = SquareMatrix<T>(rows: self.rows)
         
-        for rowIndex in 0..<self.rows {
-            for colIndex in 0..<self.columns {
+        for rowIndex in 0 ..< self.rows {
+            for colIndex in 0 ..< self.columns {
                 var lhsValue = self[rowIndex, colIndex]
                 var rhsValue = rhs[rowIndex, colIndex]
                 

@@ -50,8 +50,8 @@ class Matrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Comparable, I
         
         var result = Matrix<T>(rows: self.rows, columns: self.columns)
         
-        for rowIndex in 0..<self.rows {
-            for colIndex in 0..<self.columns {
+        for rowIndex in 0 ..< self.rows {
+            for colIndex in 0 ..< self.columns {
                 var lhsValue = self[rowIndex, colIndex]
                 var rhsValue = rhs[rowIndex, colIndex]
                 
@@ -102,8 +102,8 @@ class Matrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Comparable, I
         
         var result = Matrix<T>(rows: self.rows, columns: self.columns)
         
-        for rowIndex in 0..<self.rows {
-            for colIndex in 0..<self.columns {
+        for rowIndex in 0 ..< self.rows {
+            for colIndex in 0 ..< self.columns {
                 var lhsValue = self[rowIndex, colIndex]
                 var rhsValue = rhs[rowIndex, colIndex]
                 
@@ -137,8 +137,8 @@ class Matrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Comparable, I
         var minorRow = 0
         var minorColumn = 0
         
-        for row in 0..<rows {
-            for col in 0..<columns {
+        for row in 0 ..< rows {
+            for col in 0 ..< columns {
                 if row != rowIndex && col != columnIndex {
                     minorMatrix[minorRow, minorColumn] = self[row, col]
                     
@@ -161,8 +161,8 @@ class Matrix<T: protocol<IAbsoluteable, IDividable, ISubtractable, Comparable, I
         
         var result = Matrix<T>(rows: self.rows, columns: self.columns)
         
-        for rowIndex in 0..<self.rows {
-            for colIndex in 0..<self.columns {
+        for rowIndex in 0 ..< self.rows {
+            for colIndex in 0 ..< self.columns {
                 var lhsValue = self[rowIndex, colIndex]
                 var rhsValue = rhs[rowIndex, colIndex]
                 
@@ -218,8 +218,8 @@ func == <T: protocol<IDividable, ISubtractable, Comparable, Initable>> (lhs: Mat
     if lhs.rows != rhs.rows { return false }
     if lhs.columns != rhs.columns { return false }
     
-    for rowIndex in 0..<lhs.rows {
-        for colIndex in 0..<rhs.columns {
+    for rowIndex in 0 ..< lhs.rows {
+        for colIndex in 0 ..< rhs.columns {
             if lhs[rowIndex, colIndex] != rhs[rowIndex, colIndex] { return false }
         }
     }

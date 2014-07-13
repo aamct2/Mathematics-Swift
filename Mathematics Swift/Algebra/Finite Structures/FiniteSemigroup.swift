@@ -34,7 +34,7 @@ class FiniteSemigroup<T: protocol<Equatable, Initable>> : FiniteMagma<T> {
     *  @return Returns **true** if the semigroup is also a band, **false** otherwise.
     */
     func isBand() -> Bool {
-        if !(contains(semigroupProperties.keys, "band")) {
+        if contains(semigroupProperties.keys, "band") == false {
             semigroupProperties["band"] = operation.isIdempotent()
         }
         
@@ -70,7 +70,7 @@ class FiniteSemigroup<T: protocol<Equatable, Initable>> : FiniteMagma<T> {
     *  @return Returns **true** if the semigroup is also a semilattice, **false** otherwise.
     */
     func isSemilattice() -> Bool {
-        if !(contains(semigroupProperties.keys, "semilattice")) {
+        if contains(semigroupProperties.keys, "semilattice") == false {
             semigroupProperties["semilattice"] = self.isBand() && operation.isCommutative()
         }
         

@@ -42,11 +42,11 @@ class FiniteLeftExternalBinaryOperation<LeftOperand: protocol<Equatable, Initabl
     
     func hasLeftIdentity() -> Bool {
         if !(contains(functionProperties.keys, "left identity")) {
-            for index1 in 0..<self.leftOperandDomain.cardinality() {
+            for index1 in 0 ..< self.leftOperandDomain.cardinality() {
                 var curLeft = leftOperandDomain[index1]
                 var same = true
                 
-                searchRightOperandDomain: for index2 in 0..<self.rightOperandDomain.cardinality() {
+                searchRightOperandDomain: for index2 in 0 ..< self.rightOperandDomain.cardinality() {
                     var curRight = rightOperandDomain[index2]
                     
                     var curTup = Tuple(size: 2)

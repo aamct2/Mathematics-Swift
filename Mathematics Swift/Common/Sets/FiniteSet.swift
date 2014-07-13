@@ -47,11 +47,11 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
             return clone()
         }
         
-        for index in 0..<cardinality() {
+        for index in 0 ..< cardinality() {
             newSet.addElement(elements[index])
         }
         
-        for index in 0..<rhs.cardinality() {
+        for index in 0 ..< rhs.cardinality() {
             newSet.addElement(rhs.elements[index])
         }
         
@@ -134,10 +134,10 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
             return newSet
         }
         
-        for lIndex in 0..<self.cardinality() {
+        for lIndex in 0 ..< self.cardinality() {
             var leftElement = self.elements[lIndex]
             
-            for rIndex in 0..<otherSet.cardinality() {
+            for rIndex in 0 ..< otherSet.cardinality() {
                 var curPair = Tuple(size: 2)
                 
                 curPair.elements[0] = leftElement
@@ -160,10 +160,10 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     func equals(otherSet: FiniteSet<T>) -> Bool {
         if cardinality() != otherSet.cardinality() { return false }
         
-        for lIndex in 0..<cardinality() {
+        for lIndex in 0 ..< cardinality() {
             var found = false
             
-            searchRHS: for rIndex in 0..<cardinality() {
+            searchRHS: for rIndex in 0 ..< cardinality() {
                 if elements[lIndex] == otherSet.elements[lIndex] {
                     found = true
                     break searchRHS
@@ -184,7 +184,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *  @return Index of 'element' in the set or -1 if the element is not found.
     */
     func indexOf(element: T) -> Int {
-        for index in 0..<cardinality() {
+        for index in 0 ..< cardinality() {
             if elements[index] == element { return index }
         }
         
@@ -204,8 +204,8 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
         // Don't waste time cranking the intersection if one of the sets is the null set
         if self.cardinality() == 0 || otherSet.cardinality() == 0 { return newSet }
         
-        for lIndex in 0..<self.cardinality() {
-            searchRHS: for rIndex in 0..<otherSet.cardinality() {
+        for lIndex in 0 ..< self.cardinality() {
+            searchRHS: for rIndex in 0 ..< otherSet.cardinality() {
                 if self.elements[lIndex] == otherSet.elements[rIndex] {
                     newSet.elements += self.elements[lIndex]
                     break searchRHS
@@ -239,7 +239,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *  @return Whether this set is a subset of another set.
     */
     func isSubsetOf(superSet: FiniteSet<T>) -> Bool {
-        for index in 0..<self.cardinality() {
+        for index in 0 ..< self.cardinality() {
             if contains(superSet.elements, self.elements[index]) == false { return false }
         }
         
@@ -272,7 +272,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
         
         elementSet.elements += element
         
-        for index in 0..<family.cardinality() {
+        for index in 0 ..< family.cardinality() {
             newFamily.addElementWithoutCheck(family.elements[index].union(elementSet))
         }
         
@@ -289,10 +289,10 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     func subtract(rhs: FiniteSet<T>) -> FiniteSet<T> {
         var newSet = FiniteSet<T>()
         
-        for lIndex in 0..<cardinality() {
+        for lIndex in 0 ..< cardinality() {
             var found = false
             
-            searchRHS: for rIndex in 0..<rhs.cardinality() {
+            searchRHS: for rIndex in 0 ..< rhs.cardinality() {
                 if elements[lIndex] == rhs.elements[rIndex] {
                     found = true
                     break searchRHS

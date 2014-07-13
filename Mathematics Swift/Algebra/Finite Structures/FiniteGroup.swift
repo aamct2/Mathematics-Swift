@@ -26,9 +26,9 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         var pairSet = FiniteSet<OrderedPair<Tuple, T>>()
         var pairTup = Tuple(elements: [T(), T()])
-        pairSet.addElement(OrderedPair<Tuple, T>(x: pairTup, y: T()))
+        pairSet.addElement(OrderedPair(x: pairTup, y: T()))
         
-        var newRelation = SetDefinedMap<Tuple, T>(relation: pairSet)
+        var newRelation = SetDefinedMap(relation: pairSet)
         
         var newOperation = FiniteBinaryOperation(codomain: newSet, relation: newRelation)
         
@@ -79,7 +79,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             var inCenter = true
             
             searchCenter: for index2 in 0 ..< self.order() {
-                if !(commutator(mySet[index1], rhs: mySet[index2]) == self.identity) {
+                if !(commutator(lhs: mySet[index1], rhs: mySet[index2]) == self.identity) {
                     inCenter = false
                     break searchCenter
                 }
@@ -106,7 +106,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         var newOp = self.operation.restriction(newSet)!
         
-        return FiniteGroup<T>(mySet: newSet, operation: newOp, knownProperties: knownProperties)
+        return FiniteGroup(mySet: newSet, operation: newOp, knownProperties: knownProperties)
     }
     
     /**
@@ -144,7 +144,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *
     *  @return The commutator of two elements.
     */
-    func commutator(lhs: T, rhs: T) -> T {
+    func commutator(#lhs: T, rhs: T) -> T {
         var tup1 = Tuple(size: 2)
         var tup2 = Tuple(size: 2)
         var tup3 = Tuple(size: 2)
@@ -171,7 +171,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         for index1 in 0 ..< self.order() {
             for index2 in 0 ..< self.order() {
-                generatorSet.addElement(self.commutator(mySet[index1], rhs: mySet[index2]))
+                generatorSet.addElement(self.commutator(lhs: mySet[index1], rhs: mySet[index2]))
             }
         }
         
@@ -182,6 +182,62 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         }
         
         return nil
+    }
+    
+    /**
+    *  Returns the double coset of a given element with two given subgroup.
+    *
+    *  @param leftSubgroup The subgroup with which to form the left coset.
+    *  @param rightSubgroup The subgroup with which to form the right coset.
+    *  @param elem The element whose double coset is to be returned.
+    *
+    *  @return The double coset of a given element with two given subgroups.
+    */
+    func doubleCoset(#leftSubgroup: FiniteGroup<T>, rightSubgroup: FiniteGroup<T>, elem: T) -> FiniteSet<T> {
+        assert(leftSubgroup.isSubgroupOf(self), "The parameter 'leftSubgroup' is not a subgroup of this group.")
+        assert(rightSubgroup.isSubgroupOf(self), "The parameter 'rightSubgroup' is not a subgroup of this group.")
+        assert(contains(self.mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        
+        var newSet = FiniteSet<T>()
+        
+        for leftIndex in 0 ..< leftSubgroup.order() {
+            for rightIndex in 0 ..< rightSubgroup.order() {
+                var tup1 = Tuple(size: 2)
+                var tup2 = Tuple(size: 2)
+                
+                tup1.elements[0] = leftSubgroup.mySet[leftIndex]
+                tup1.elements[1] = elem
+                tup2.elements[0] = self.applyOperation(tup1)!
+                tup2.elements[1] = rightSubgroup.mySet[rightIndex]
+                
+                newSet.addElement(self.applyOperation(tup2)!)
+            }
+        }
+        
+        return newSet
+    }
+    
+    /**
+    *  Returns the Frattini subgroup of this group. In other words, the intersection of all maximal subgroups. If the group has no maximal subgroups, the Frattini subgroup is the whole group.
+    *
+    *  @return The frattini subgroup of this group.
+    */
+    func frattiniSubgroup() -> FiniteGroup<T> {
+        var maxSubgroups = self.setOfAllMaximalSubgroups()
+        
+        if maxSubgroups.cardinality() == 0 { return self }
+        
+        var newSet = FiniteSet<T>()
+        
+        newSet = newSet.union(maxSubgroups[0].mySet)
+        maxSubgroups.deleteElement(0)
+        for subgroup in maxSubgroups {
+            newSet = newSet.intersection(subgroup.mySet)
+        }
+        
+        var newOp = self.operation.restriction(newSet)!
+        
+        return FiniteGroup(mySet: newSet, operation: newOp, knownProperties: self.subgroupClosedProperties())
     }
     
     /**
@@ -241,7 +297,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is abelian, **false** otherwise.
     */
     func isAbelian() -> Bool {
-        if !(contains(groupProperties.keys, "abelian")) {
+        if contains(groupProperties.keys, "abelian") == false {
             groupProperties["abelian"] = self.operation.isCommutative()
         }
         
@@ -254,12 +310,12 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is ambivalent, **false** otherwise.
     */
     func isAmbivalent() -> Bool {
-        if !(contains(groupProperties.keys, "ambivalent")) {
+        if contains(groupProperties.keys, "ambivalent") == false {
             for index in 0 ..< self.order() {
                 var curElem = mySet[index]
                 var curInverse = operation.inverseElement(curElem)!
                 
-                if self.isConjugate(curElem, rhs: curInverse) == false {
+                if self.isConjugate(lhs: curElem, rhs: curInverse) == false {
                     groupProperties["ambivalen"] = false
                     return false
                 }
@@ -279,7 +335,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *
     *  @return Returns **true** if the two elements are conjugates, **false** otherwise.
     */
-    func isConjugate(lhs: T, rhs: T) -> Bool {
+    func isConjugate(#lhs: T, rhs: T) -> Bool {
         assert(contains(mySet.elements, lhs), "The parameter 'lhs' is not a member of this group.")
         assert(contains(mySet.elements, rhs), "The parameter 'rhs' is not a member of this group.")
         
@@ -306,7 +362,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is cyclic, **false** otherwise.
     */
     func isCyclic() -> Bool {
-        if !(contains(groupProperties.keys, "cyclic")) {
+        if contains(groupProperties.keys, "cyclic") == false {
             for index in 0 ..< self.order() {
                 if self.generatesGroup(mySet[index]) {
                     groupProperties["cyclic"] = true
@@ -326,7 +382,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is a Dedekind group, **false** otherwise.
     */
     func isDedekind() -> Bool {
-        if !(contains(groupProperties.keys, "dedekind")) {
+        if contains(groupProperties.keys, "dedekind") == false {
             // Abelian implies Dedekind, check to see if we've calculated that already.
             if contains(groupProperties.keys, "abelian") {
                 if groupProperties["abelian"] {
@@ -362,7 +418,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if a given set and operation will form a group, **false** otherwise.
     */
     class func isGroup(testSet: FiniteSet<T>, testOperation: FiniteBinaryOperation<T>) -> Bool {
-        return FiniteMonoid<T>.isMonoid(testSet, testOperation: testOperation) && testOperation.hasInverses()
+        return FiniteMonoid.isMonoid(testSet, testOperation: testOperation) && testOperation.hasInverses()
     }
     
     /**
@@ -382,7 +438,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is a Hamiltonian group, **false** otherwise.
     */
     func isHamiltonian() -> Bool {
-        if !(contains(groupProperties.keys, "hamiltonian")) {
+        if contains(groupProperties.keys, "hamiltonian") == false {
             if self.isDedekind() == true && self.isAbelian() == false {
                 groupProperties["hamiltonian"] = true
             } else {
@@ -399,7 +455,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is hypoabelian, **false** otherwise.
     */
     func isHypoabelian() -> Bool {
-        if !(contains(groupProperties.keys, "hypoabelian")) {
+        if contains(groupProperties.keys, "hypoabelian") == false {
             // Solvable implies hypoabelian, check to see if we've calculated that already.
             if contains(groupProperties.keys, "solvable") {
                 if groupProperties["solvable"] {
@@ -475,7 +531,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is perfect, **false** otherwise.
     */
     func isPerfect() -> Bool {
-        if !(contains(groupProperties.keys, "perfect")) {
+        if contains(groupProperties.keys, "perfect") == false {
             if let myDerivedSubgroup = self.derivedSubgroup() {
                 if self == myDerivedSubgroup {
                     groupProperties["perfect"] = true
@@ -512,7 +568,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the group is simple, **false** otherwise.
     */
     func isSimple() -> Bool {
-        if !(contains(groupProperties.keys, "simple")) {
+        if contains(groupProperties.keys, "simple") == false {
             // Check to make sure the group's only normal subgroups are itself and the trivial subgroup
             // And check to make sure it is not the trivial group itself
             if self.setOfAllNormalSubgroups().cardinality() <= 2 && self.order() > 1 {
@@ -561,7 +617,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         var newSet = FiniteSet<T>()
         
-        for index in 0 ..< self.mySet.cardinality() {
+        for index in 0 ..< self.order() {
             var curTup = Tuple(size: 2)
             
             curTup.elements[0] = elem
@@ -704,7 +760,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         var newSet = FiniteSet<T>()
         
-        for index in 0 ..< self.mySet.cardinality() {
+        for index in 0 ..< self.order() {
             var curTup = Tuple(size: 2)
             
             curTup.elements[0] = subgroup.mySet[index]
@@ -724,7 +780,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     func setOfAllConjugacyClasses() -> FiniteSet<FiniteSet<T>> {
         var newSet = FiniteSet<FiniteSet<T>>()
         
-        for index in 0 ..< mySet.cardinality() {
+        for index in 0 ..< self.order() {
             newSet.addElement(self.conjugacyClass(mySet[index]))
         }
         
@@ -756,7 +812,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return The set of all normal subgroups.
     */
     func setOfAllNormalSubgroups() -> FiniteSet<FiniteGroup<T>> {
-        if !(contains(groupProperties.keys, "all normal subgroups")) {
+        if contains(groupProperties.keys, "all normal subgroups") == false {
             // Check to see if it is an abelian group, makes this trivial
             if contains(groupProperties.keys, "abelian") {
                 if groupProperties["abelian"] == true {
@@ -783,7 +839,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     }
     
     func setOfAllSubgroups() -> FiniteSet<FiniteGroup<T>> {
-        if !(contains(groupProperties.keys, "all subgroups")) {
+        if contains(groupProperties.keys, "all subgroups") == false {
             var newSet = FiniteSet<FiniteGroup<T>>()
             
             var modifiedSet = mySet.clone()
@@ -811,8 +867,8 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
             
             for index in 0 ..< pwrSet.cardinality() {
                 if let newOp = operation.restriction(pwrSet[index]) {
-                    if FiniteGroup<T>.isGroup(pwrSet[index], testOperation: newOp) {
-                        newSet.addElement(FiniteGroup<T>(mySet: pwrSet[index], operation: newOp, knownProperties: knownProps))
+                    if FiniteGroup.isGroup(pwrSet[index], testOperation: newOp) {
+                        newSet.addElement(FiniteGroup(mySet: pwrSet[index], operation: newOp, knownProperties: knownProps))
                     } else {
                         // If there was an exception, the operation does not exist, so that element of the power set is not a group
                     }
@@ -850,7 +906,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         
         var newOp = self.operation.restriction(newSet)!
         
-        return FiniteGroup<T>(mySet: newSet, operation: newOp, knownProperties: subgroupClosedProperties())
+        return FiniteGroup(mySet: newSet, operation: newOp, knownProperties: subgroupClosedProperties())
     }
     
     // MARK: - Properties Subsets

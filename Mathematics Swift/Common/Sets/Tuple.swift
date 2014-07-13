@@ -19,7 +19,7 @@ class Tuple : Equatable, Initable {
     init(size: Int) {
         self.size = size
         
-        for index in 0..<size {
+        for index in 0 ..< size {
             elements += ""
         }
     }

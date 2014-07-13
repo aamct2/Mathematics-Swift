@@ -24,7 +24,7 @@ class SetDefinedMap<X: protocol<Equatable, Initable>, Y: protocol<Equatable, Ini
     }
     
     override func applyMap(input: X) -> Y {
-        for index in 0..<self.relation.cardinality() {
+        for index in 0 ..< self.relation.cardinality() {
             if relation[index].x == input {
                 return relation[index].y
             }
