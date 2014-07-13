@@ -80,7 +80,7 @@ class FiniteMonoid<T: protocol<Equatable, Initable>> : FiniteSemigroup<T> {
     func isIsomorphism<G: protocol<Equatable, Initable>>(codomain: FiniteMonoid<G>, testFunction: FiniteFunction<T, G>) -> Bool {
         
         assert(testFunction.codomain == codomain.mySet, "The codomain of of the parameter 'testFunction' is not the parameter 'codomain'.")
-        assert(testFunction.domain == self.mySet, "The domain of of the parameter 'testFunction' is not this group.")
+        assert(testFunction.domain == self.mySet, "The domain of of the parameter 'testFunction' is not this monoid.")
         
         if testFunction.isBijective() && self.isHomomorphism(codomain, testFunction: testFunction) {
             return true

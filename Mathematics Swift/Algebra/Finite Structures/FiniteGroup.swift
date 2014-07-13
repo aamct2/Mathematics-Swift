@@ -365,6 +365,22 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         return result
     }
     
+    /**
+    *  Determines whether a function is a isomorphism from this group to another group. In other words, it's a bijective homomorphism.
+    *
+    *  @param codomain The other group (which forms the codomain of the function).
+    *  @param testFunction The function to test whether or not it is a isomorphism.
+    *
+    *  @return Returns **true** if the function is a group isomorphism, **false** otherwise.
+    */
+    func isIsomorphism<G: protocol<Equatable, Initable>>(codomain: FiniteGroup<G>, testFunction: FiniteFunction<T, G>) -> Bool {
+        
+        assert(testFunction.codomain == codomain.mySet, "The codomain of of the parameter 'testFunction' is not the parameter 'codomain'.")
+        assert(testFunction.domain == self.mySet, "The domain of of the parameter 'testFunction' is not this group.")
+        
+        return super.isIsomorphism(codomain, testFunction: testFunction)
+    }
+    
     
     /**
     *  Determines whether this group is a maximal subgroup of a given group. A maximal subgroup is a proper subgroup that is not strictly contained by any other proper subgroup.
