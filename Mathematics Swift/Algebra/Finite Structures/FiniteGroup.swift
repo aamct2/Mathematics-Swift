@@ -117,7 +117,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return The conjugacy class of an element as a **FiniteSet**.
     */
     func conjugacyClass(elem: T) -> FiniteSet<T> {
-        assert(contains(mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        assert(mySet.containsElement(elem), "The parameter 'elem' is not an element of this group.")
         
         var newSet = FiniteSet<T>()
         
@@ -149,7 +149,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
         var tup2 = Tuple(size: 2)
         var tup3 = Tuple(size: 2)
         
-        assert(contains(self.mySet.elements, lhs) && contains(self.mySet.elements, rhs), "The parameter 'lhs' or 'rhs' is not a member of the group.")
+        assert(self.mySet.containsElement(lhs) && self.mySet.containsElement(rhs), "The parameter 'lhs' or 'rhs' is not a member of the group.")
         
         tup1.elements[0] = self.operation.inverseElement(lhs)!
         tup1.elements[1] = self.operation.inverseElement(rhs)!
@@ -196,7 +196,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     func doubleCoset(#leftSubgroup: FiniteGroup<T>, rightSubgroup: FiniteGroup<T>, elem: T) -> FiniteSet<T> {
         assert(leftSubgroup.isSubgroupOf(self), "The parameter 'leftSubgroup' is not a subgroup of this group.")
         assert(rightSubgroup.isSubgroupOf(self), "The parameter 'rightSubgroup' is not a subgroup of this group.")
-        assert(contains(self.mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        assert(self.mySet.containsElement(elem), "The parameter 'elem' is not an element of this group.")
         
         var newSet = FiniteSet<T>()
         
@@ -248,7 +248,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if a given element generates the whole group, **false** otherwise.
     */
     func generatesGroup(elem: T) -> Bool {
-        assert(contains(mySet.elements, elem), "The parameter 'elem' is not a member of this group.")
+        assert(mySet.containsElement(elem), "The parameter 'elem' is not a member of this group.")
         
         if self.order(elem) == self.order() { return true }
         
@@ -273,7 +273,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
                     curTup.elements[1] = result[index2]
                     
                     if let curElem = theMap.applyMap(curTup) {
-                        if contains(result.elements, curElem) == false {
+                        if result.containsElement(curElem) == false {
                             result.addElement(curElem)
                             foundNewElement = true
                         }
@@ -302,8 +302,8 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return Returns **true** if the two elements are conjugates, **false** otherwise.
     */
     func isConjugate(#lhs: T, rhs: T) -> Bool {
-        assert(contains(mySet.elements, lhs), "The parameter 'lhs' is not a member of this group.")
-        assert(contains(mySet.elements, rhs), "The parameter 'rhs' is not a member of this group.")
+        assert(mySet.containsElement(lhs), "The parameter 'lhs' is not a member of this group.")
+        assert(mySet.containsElement(rhs), "The parameter 'rhs' is not a member of this group.")
         
         for index in 0 ..< self.order() {
             var tup1 = Tuple(size: 2)
@@ -482,7 +482,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     */
     func leftCoset(subgroup: FiniteGroup<T>, elem: T) -> FiniteSet<T> {
         assert(subgroup.isSubgroupOf(self), "The parameter 'subgroup' is not a subgroup of this group.")
-        assert(contains(self.mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        assert(self.mySet.containsElement(elem), "The parameter 'elem' is not an element of this group.")
         
         var newSet = FiniteSet<T>()
         
@@ -515,7 +515,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     *  @return The order of a given element.
     */
     func order(elem: T) -> Int {
-        assert(contains(mySet.elements, elem), "The parameter 'elem' is not a member of the group.")
+        assert(mySet.containsElement(elem), "The parameter 'elem' is not a member of the group.")
         
         // if self.order() > 5
         
@@ -625,7 +625,7 @@ class FiniteGroup<T: protocol<Equatable, Initable>> : FiniteMonoid<T>, Equatable
     */
     func rightCoset(subgroup: FiniteGroup<T>, elem: T) -> FiniteSet<T> {
         assert(subgroup.isSubgroupOf(self), "The parameter 'subgroup' is not a subgroup of this group.")
-        assert(contains(self.mySet.elements, elem), "The parameter 'elem' is not an element of this group.")
+        assert(self.mySet.containsElement(elem), "The parameter 'elem' is not an element of this group.")
         
         var newSet = FiniteSet<T>()
         

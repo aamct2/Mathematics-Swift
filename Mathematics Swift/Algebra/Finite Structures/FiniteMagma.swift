@@ -61,14 +61,14 @@ class FiniteMagma<T: protocol<Equatable, Initable>> {
             var result = FiniteSet<T>()
             
             for index in 0 ..< mySet.cardinality() {
-                let curElem = mySet.elements[index]
+                let curElem = mySet[index]
                 
                 var curTup = Tuple(size: 2)
                 
                 curTup.elements[0] = curElem
                 curTup.elements[1] = curElem
                 
-                result.elements += self.operation.applyMap(curTup)!
+                result.addElement(self.operation.applyMap(curTup)!)
             }
             
             allSquareElements = result

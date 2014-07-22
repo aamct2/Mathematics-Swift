@@ -8,15 +8,15 @@
 
 import Foundation
 
-class Tuple : Equatable, Initable {
+public class Tuple : Equatable, Initable {
     var size = 0
     var elements = [AnyObject]()
     
     // MARK: - Constructors
     
-    init() {}
+    public init() {}
     
-    init(size: Int) {
+    public init(size: Int) {
         self.size = size
         
         for index in 0 ..< size {
@@ -24,14 +24,14 @@ class Tuple : Equatable, Initable {
         }
     }
     
-    init(elements: [AnyObject]) {
+    public init(elements: [AnyObject]) {
         self.size = elements.count
         self.elements = elements
     }
     
     // MARK: - Methods
     
-    func equals(otherTuple: Tuple) -> Bool {
+    public func equals(otherTuple: Tuple) -> Bool {
         // Make sure the tuples are of the same size
         if self.size != otherTuple.size { return false }
         
@@ -46,6 +46,6 @@ class Tuple : Equatable, Initable {
     
 }
 
-func == (lhs: Tuple, rhs: Tuple) -> Bool {
+public func == (lhs: Tuple, rhs: Tuple) -> Bool {
     return lhs.equals(rhs)
 }

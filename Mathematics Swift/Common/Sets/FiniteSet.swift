@@ -8,11 +8,13 @@
 
 import Foundation
 
-class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtractable, Sequence {
+public class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtractable, Sequence {
     
-    var elements = [T]()
+    // MARK: - Properties
     
-    var additiveIdentity : FiniteSet<T> {
+    private var elements = [T]()
+    
+    public var additiveIdentity : FiniteSet<T> {
         return FiniteSet<T>()
     }
     
@@ -22,9 +24,9 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     
     // MARK: - Constructors
     
-    init() {}
+    public init() {}
     
-    init(elements: [T]) {
+    public init(elements: [T]) {
         self.elements = elements
     }
     
@@ -37,7 +39,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Union of this set with another set.
     */
-    func add(rhs: FiniteSet<T>) -> FiniteSet<T> {
+    public func add(rhs: FiniteSet<T>) -> FiniteSet<T> {
         var newSet = FiniteSet<T>()
         
         // Don't waste time cranking the intersection if one of the sets is null
@@ -63,7 +65,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @param newElement
     */
-    func addElement(newElement: T) {
+    public func addElement(newElement: T) {
         for element in elements {
             if element == newElement { return }
         }
@@ -76,7 +78,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @param newElement
     */
-    func addElementWithoutCheck(newElement: T) {
+    public func addElementWithoutCheck(newElement: T) {
         elements += newElement
     }
     
@@ -85,14 +87,18 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Number of elements in this set.
     */
-    func cardinality() -> Int {
+    public func cardinality() -> Int {
         return elements.count
     }
     
-    func clone() -> FiniteSet<T> {
+    public func clone() -> FiniteSet<T> {
         // TODO: Finish
         
         return FiniteSet<T>()
+    }
+    
+    public func containsElement(element: T) -> Bool {
+        return contains(self.elements, element)
     }
     
     /**
@@ -100,7 +106,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @param index Index of the element to be deleted.
     */
-    func deleteElement(index: Int) {
+    public func deleteElement(index: Int) {
         assert(index <= elements.count - 1, "Index out of range.")
         
         elements.removeAtIndex(index)
@@ -113,7 +119,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Difference of this set minus the other set.
     */
-    func difference(otherSet: FiniteSet<T>) -> FiniteSet<T> {
+    public func difference(otherSet: FiniteSet<T>) -> FiniteSet<T> {
         return self.subtract(otherSet)
     }
     
@@ -124,7 +130,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Direct product of this set and another set.
     */
-    func directProduct<G: protocol<Equatable, Initable>>(otherSet: FiniteSet<G>) -> FiniteSet<Tuple> {
+    public func directProduct<G: protocol<Equatable, Initable>>(otherSet: FiniteSet<G>) -> FiniteSet<Tuple> {
         
         var newSet = FiniteSet<Tuple>()
         
@@ -157,7 +163,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Whether this set is equal to another set.
     */
-    func equals(otherSet: FiniteSet<T>) -> Bool {
+    public func equals(otherSet: FiniteSet<T>) -> Bool {
         if cardinality() != otherSet.cardinality() { return false }
         
         for lIndex in 0 ..< cardinality() {
@@ -183,7 +189,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Index of 'element' in the set or -1 if the element is not found.
     */
-    func indexOf(element: T) -> Int {
+    public func indexOf(element: T) -> Int {
         for index in 0 ..< cardinality() {
             if elements[index] == element { return index }
         }
@@ -198,7 +204,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Intersection of this set with another set.
     */
-    func intersection(otherSet: FiniteSet<T>) -> FiniteSet<T> {
+    public func intersection(otherSet: FiniteSet<T>) -> FiniteSet<T> {
         var newSet = FiniteSet<T>()
         
         // Don't waste time cranking the intersection if one of the sets is the null set
@@ -223,7 +229,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Whether this set is a proper subset of the superset.
     */
-    func isProperSubsetOf(superSet: FiniteSet<T>) -> Bool {
+    public func isProperSubsetOf(superSet: FiniteSet<T>) -> Bool {
         if self.isSubsetOf(superSet) == true && self.equals(superSet) == false {
             return true
         }
@@ -238,7 +244,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Whether this set is a subset of another set.
     */
-    func isSubsetOf(superSet: FiniteSet<T>) -> Bool {
+    public func isSubsetOf(superSet: FiniteSet<T>) -> Bool {
         for index in 0 ..< self.cardinality() {
             if contains(superSet.elements, self.elements[index]) == false { return false }
         }
@@ -251,7 +257,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Powerset of this set.
     */
-    func powerSet() -> FiniteSet<FiniteSet<T>> {
+    public func powerSet() -> FiniteSet<FiniteSet<T>> {
         var newSet = FiniteSet<FiniteSet<T>>()
         
         if self.cardinality() == 0 {
@@ -266,7 +272,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
         return differenceSet.powerSet().union(familyPlusElement(self.elements[0], family: differenceSet.powerSet()))
     }
     
-    func familyPlusElement(element: T, family: FiniteSet<FiniteSet<T>>) -> FiniteSet<FiniteSet<T>> {
+    private func familyPlusElement(element: T, family: FiniteSet<FiniteSet<T>>) -> FiniteSet<FiniteSet<T>> {
         var newFamily = FiniteSet<FiniteSet<T>>()
         var elementSet = FiniteSet<T>()
         
@@ -286,7 +292,7 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Difference of this set minus the other set.
     */
-    func subtract(rhs: FiniteSet<T>) -> FiniteSet<T> {
+    public func subtract(rhs: FiniteSet<T>) -> FiniteSet<T> {
         var newSet = FiniteSet<T>()
         
         for lIndex in 0 ..< cardinality() {
@@ -314,18 +320,18 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     *
     *  @return Union of this set with another set.
     */
-    func union(otherSet: FiniteSet<T>) -> FiniteSet<T> {
+    public func union(otherSet: FiniteSet<T>) -> FiniteSet<T> {
         return self.add(otherSet)
     }
     
-    func generate() -> FiniteSetGenerator<T> {
+    public func generate() -> FiniteSetGenerator<T> {
         return FiniteSetGenerator<T>(elements: elements[0 ..< elements.count])
     }
     
     /**
     *  Getter for subscript based on index.
     */
-    subscript(index: Int) -> T {
+    public subscript(index: Int) -> T {
         get {
             assert(index < elements.count, "Index out of range")
             return elements[index]
@@ -338,8 +344,8 @@ class FiniteSet<T : protocol<Equatable, Initable>> : Equatable, Initable, ISubtr
     
 }
 
-struct FiniteSetGenerator<T: protocol<Equatable, Initable>> : Generator {
-    mutating func next() -> T? {
+public struct FiniteSetGenerator<T: protocol<Equatable, Initable>> : Generator {
+    public mutating func next() -> T? {
         if elements.isEmpty {return nil}
         
         let ret = elements[0]
@@ -351,14 +357,14 @@ struct FiniteSetGenerator<T: protocol<Equatable, Initable>> : Generator {
     var elements: Slice<T>
 }
 
-func == <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> Bool {
+public func == <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> Bool {
     return lhs.equals(rhs)
 }
 
-func + <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
+public func + <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
     return lhs.union(rhs)
 }
 
-func - <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
+public func - <T: protocol<Equatable, Initable>> (lhs: FiniteSet<T>, rhs: FiniteSet<T>) -> FiniteSet<T> {
     return lhs.difference(rhs)
 }

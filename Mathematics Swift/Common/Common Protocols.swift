@@ -8,51 +8,51 @@
 
 import Foundation
 
-@class_protocol protocol Initable {
+@class_protocol public protocol Initable {
 //protocol Initable {
     init()
 }
 
-protocol IAbsoluteable {
+public protocol IAbsoluteable {
     
     func absoluteValue() -> Self
     
 }
 
-protocol IAddable {
+public protocol IAddable {
     
     func add(rhs: Self) -> Self
     func +(lhs: Self, rhs: Self) -> Self
     
 }
 
-protocol IAdditiveIdentity {
+public protocol IAdditiveIdentity {
     
     var additiveIdentity : Self { get }
     
 }
 
-protocol IDividable : IMultipliable, IMultiplicativeIdentity {
+public protocol IDividable : IMultipliable, IMultiplicativeIdentity {
     
     func divide(rhs: Self) -> Self
     func /(lhs: Self, rhs: Self) -> Self
     
 }
 
-protocol IMultipliable {
+public protocol IMultipliable {
     
     func multiply(rhs: Self) -> Self
     func *(lhs: Self, rhs: Self) -> Self
     
 }
 
-protocol IMultiplicativeIdentity {
+public protocol IMultiplicativeIdentity {
     
     var multiplicativeIdentity : Self { get }
     
 }
 
-protocol ISubtractable : IAddable, IAdditiveIdentity {
+public protocol ISubtractable : IAddable, IAdditiveIdentity {
     
     func subtract(rhs: Self) -> Self
     func -(lhs: Self, rhs: Self) -> Self
